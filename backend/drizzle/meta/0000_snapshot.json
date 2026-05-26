@@ -1,5 +1,5 @@
 {
-  "id": "586120eb-3f78-487c-84f1-2a20762b4b6b",
+  "id": "cefced90-f2ec-41d2-99f1-8af7c1232004",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -22,8 +22,7 @@
         },
         "office": {
           "name": "office",
-          "type": "office",
-          "typeSchema": "public",
+          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
         },
@@ -60,39 +59,6 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.departments": {
-      "name": "departments",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "departments_name_unique": {
-          "name": "departments_name_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
-        }
-      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -180,7 +146,7 @@
         },
         "status": {
           "name": "status",
-          "type": "dean_status",
+          "type": "StatusEnum",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
@@ -222,6 +188,39 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.departments": {
+      "name": "departments",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "departments_name_unique": {
+          "name": "departments_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.directors": {
       "name": "directors",
       "schema": "",
@@ -238,10 +237,9 @@
           "primaryKey": false,
           "notNull": true
         },
-        "office": {
-          "name": "office",
-          "type": "office",
-          "typeSchema": "public",
+        "office_id": {
+          "name": "office_id",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
@@ -267,6 +265,19 @@
           "tableTo": "persons",
           "columnsFrom": [
             "person_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "directors_office_id_offices_id_fk": {
+          "name": "directors_office_id_offices_id_fk",
+          "tableFrom": "directors",
+          "tableTo": "offices",
+          "columnsFrom": [
+            "office_id"
           ],
           "columnsTo": [
             "id"
@@ -311,10 +322,9 @@
           "notNull": true,
           "default": "'active'"
         },
-        "department": {
-          "name": "department",
-          "type": "department",
-          "typeSchema": "public",
+        "department_id": {
+          "name": "department_id",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         }
@@ -333,10 +343,56 @@
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
+        },
+        "faculty_department_id_departments_id_fk": {
+          "name": "faculty_department_id_departments_id_fk",
+          "tableFrom": "faculty",
+          "tableTo": "departments",
+          "columnsFrom": [
+            "department_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.offices": {
+      "name": "offices",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "offices_name_unique": {
+          "name": "offices_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -389,6 +445,36 @@
         },
         "password": {
           "name": "password",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "house_number": {
+          "name": "house_number",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "street": {
+          "name": "street",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "barangay": {
+          "name": "barangay",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "city_municipality": {
+          "name": "city_municipality",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "region": {
+          "name": "region",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
@@ -482,8 +568,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.offices": {
-      "name": "offices",
+    "public.staff": {
+      "name": "staff",
       "schema": "",
       "columns": {
         "id": {
@@ -498,10 +584,9 @@
           "primaryKey": false,
           "notNull": true
         },
-        "office": {
-          "name": "office",
-          "type": "office",
-          "typeSchema": "public",
+        "office_id": {
+          "name": "office_id",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
@@ -522,12 +607,25 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "offices_person_id_persons_id_fk": {
-          "name": "offices_person_id_persons_id_fk",
-          "tableFrom": "offices",
+        "staff_person_id_persons_id_fk": {
+          "name": "staff_person_id_persons_id_fk",
+          "tableFrom": "staff",
           "tableTo": "persons",
           "columnsFrom": [
             "person_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "staff_office_id_offices_id_fk": {
+          "name": "staff_office_id_offices_id_fk",
+          "tableFrom": "staff",
+          "tableTo": "offices",
+          "columnsFrom": [
+            "office_id"
           ],
           "columnsTo": [
             "id"
@@ -564,17 +662,15 @@
           "primaryKey": false,
           "notNull": true
         },
-        "department": {
-          "name": "department",
-          "type": "department",
-          "typeSchema": "public",
+        "department_id": {
+          "name": "department_id",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
-        "course": {
-          "name": "course",
-          "type": "course_enum",
-          "typeSchema": "public",
+        "course_id": {
+          "name": "course_id",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
@@ -615,6 +711,32 @@
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
+        },
+        "students_department_id_departments_id_fk": {
+          "name": "students_department_id_departments_id_fk",
+          "tableFrom": "students",
+          "tableTo": "departments",
+          "columnsFrom": [
+            "department_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "students_course_id_courses_id_fk": {
+          "name": "students_course_id_courses_id_fk",
+          "tableFrom": "students",
+          "tableTo": "courses",
+          "columnsFrom": [
+            "course_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -625,64 +747,12 @@
     }
   },
   "enums": {
-    "public.office": {
-      "name": "office",
-      "schema": "public",
-      "values": [
-        "Registrar",
-        "Accounting",
-        "Human Resources",
-        "IT Support",
-        "Student Affairs",
-        "Faculty Affairs",
-        "Research and Development",
-        "Library Services",
-        "Facilities Management",
-        "Security",
-        "Finance",
-        "Admissions",
-        "Alumni Relations",
-        "Public Relations",
-        "Legal Affairs",
-        "Academic Affairs",
-        "Administrative Services"
-      ]
-    },
     "public.StatusEnum": {
       "name": "StatusEnum",
       "schema": "public",
       "values": [
         "active",
         "inactive"
-      ]
-    },
-    "public.course_enum": {
-      "name": "course_enum",
-      "schema": "public",
-      "values": [
-        "Bachelor of Science in Information Technology",
-        "Bachelor of Science in Accountancy",
-        "Bachelor of Science in Business Administration",
-        "Bachelor of Science in Journalism",
-        "Bachelor of Science in Criminology",
-        "Bachelor of Science in Psychology",
-        "Bachelor in Elementary Education",
-        "Bachelor in Secondary Education",
-        "Master of Science in Information Technology",
-        "Master of Science in Accountancy",
-        "Master of Science in Business Administration"
-      ]
-    },
-    "public.department": {
-      "name": "department",
-      "schema": "public",
-      "values": [
-        "College of Computer Studies",
-        "College of Accountancy",
-        "College of Criminal Justice Education",
-        "College of Teacher Education",
-        "College of Arts and Sciences",
-        "School of Graduate Studies"
       ]
     },
     "public.student_type": {

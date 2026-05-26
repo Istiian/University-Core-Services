@@ -1,7 +1,7 @@
 import { integer, pgTable, varchar, date, pgEnum } from "drizzle-orm/pg-core";
 import { persons } from "./Person";
 import { StatusEnum } from "./Enum";
-import { departmentEnum } from "./Enum";
+import { departments } from "./Department";
 
 
 export const faculty = pgTable('faculty', {
@@ -9,5 +9,5 @@ export const faculty = pgTable('faculty', {
     personId: integer('person_id').notNull().references(() => persons.id),
     hireDate: date('hire_date').notNull(),
     status: StatusEnum('status').notNull().default('active'),
-    department: departmentEnum('department').notNull(),
+    departmentId: integer('department_id').notNull().references(() => departments.id),
 });

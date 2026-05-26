@@ -1,13 +1,13 @@
-import { integer, pgTable, varchar, date, pgEnum } from "drizzle-orm/pg-core";
+import { integer, pgTable, date } from "drizzle-orm/pg-core";
 import { persons } from "./Person";
-import { OfficeEnum, StatusEnum } from "./Enum";
+import { StatusEnum } from "./Enum";
+import { offices } from "./Office";
 
 
-
-export const offices = pgTable('offices', {
+export const staff = pgTable('staff', {
     id: integer('id').primaryKey(),
     personId: integer('person_id').notNull().references(() => persons.id),
-    office: OfficeEnum('office').notNull(),
+    officeId: integer('office_id').notNull().references(() => offices.id),
     hireDate: date('hire_date').notNull(),
     status: StatusEnum('status').notNull().default('active'),
 });

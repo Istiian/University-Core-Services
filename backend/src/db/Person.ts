@@ -9,4 +9,9 @@ export const persons = pgTable('persons', {
     contactNumber: varchar('contact_number', { length: 20 }).notNull(),
     email: varchar('email', { length: 255 }).notNull().unique(),
     password: varchar('password', { length: 255 }).notNull(),
+    houseNumber: varchar('house_number', { length: 255 }).notNull(),
+    street: varchar('street', { length: 255 }).notNull(),
+    barangay: varchar('barangay', { length: 255 }).notNull(),
+    cityMunicipality: varchar('city_municipality', { length: 255 }).notNull(),
+    region: varchar('region', { length: 255 }).notNull(),
 });

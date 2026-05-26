@@ -1,5 +1,5 @@
 import { integer, pgTable, varchar, date, pgEnum } from "drizzle-orm/pg-core";
-import { departments } from "./College_Department";
+import { departments } from "./Department";
 
 export const courses = pgTable('courses', {
     id: integer('id').primaryKey(),

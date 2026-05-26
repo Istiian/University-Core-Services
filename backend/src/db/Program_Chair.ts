@@ -1,4 +1,4 @@
-import { integer, pgTable, varchar, date, pgEnum } from "drizzle-orm/pg-core";
+import { integer, pgTable, date } from "drizzle-orm/pg-core";
 import { persons } from "./Person";
 import {courses} from "./Course";
 import {StatusEnum} from "./Enum";

@@ -1,4 +1,4 @@
-import { integer, pgTable, varchar, date, pgEnum } from "drizzle-orm/pg-core";
+import { integer, pgTable, varchar,  } from "drizzle-orm/pg-core";
 
 export const departments = pgTable('departments', {
     id: integer('id').primaryKey(),
