@@ -1,13 +1,19 @@
 import { integer, pgTable, varchar, date, pgEnum } from "drizzle-orm/pg-core";
 import { persons } from "./Person";
-import { StatusEnum } from "./Enum";
+import { EmployeeStatus, EmployeeType } from "./Enum";
 import { departments } from "./Department";
-
+import {relations} from "drizzle-orm";
 
 export const faculty = pgTable('faculty', {
     id: integer('id').primaryKey(),
-    personId: integer('person_id').notNull().references(() => persons.id),
+    personId: integer('person_id').notNull().references(() => persons.id).unique(),
     hireDate: date('hire_date').notNull(),
-    status: StatusEnum('status').notNull().default('active'),
+    status: EmployeeStatus('status').notNull().default('active'),
+    type: EmployeeType('type').notNull(),
     departmentId: integer('department_id').notNull().references(() => departments.id),
 });
+
+export const facultyRelations = relations(faculty, ({ one }) => ({
+    person: one(persons),
+    department: one(departments)
+}));

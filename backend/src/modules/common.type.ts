@@ -1,9 +1,13 @@
-import { Status, studentType } from "./person.enum";
+// import { Status, studentType } from "./Person/person.enum";
 
-export enum DeanStatus {
-    Active = "active",
-    Inactive = "inactive"
-}
+
+
+type studentStatus = "active" | "graduated" | "dropped" | "suspended";
+type studentType = "regular" | "irregular";
+
+type employeeStatus = "active" | "suspended" | "terminated" | "retired" | "resigned";
+type employeeType = "Full-time" | "Part-time" | "Contractual";
+
 
 export interface Person {
     id: number;
