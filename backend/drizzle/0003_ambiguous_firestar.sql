@@ -1,0 +1,1 @@
+ALTER TABLE "staff" RENAME COLUMN "hire_date" TO "start_date";

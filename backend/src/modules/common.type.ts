@@ -8,7 +8,13 @@ type studentType = "regular" | "irregular";
 type employeeStatus = "active" | "suspended" | "terminated" | "retired" | "resigned";
 type employeeType = "Full-time" | "Part-time" | "Contractual";
 
-
+type address = {
+    houseNumber: string;
+    street: string;
+    barangay: string;
+    cityMunicipality: string;
+    region: string;
+};
 export interface Person {
     id: number;
     firstName: string;
@@ -18,13 +24,9 @@ export interface Person {
     contactNumber: string;
     email: string;
     password: string;
-    houseNumber: string;
-    street: string;
-    barangay: string;
-    cityMunicipality: string;
-    region: string;
+    repeatPassword: string;
+    address: address;
 }
-
 export interface CollegeDepartment{
     id: number;
     name: string;
@@ -40,54 +42,49 @@ export interface Staff {
     id: number;
     personId: number;
     officeId: number;
-    hireDate: string;
-    status: Status;
+    startDate: string;
+    status?: employeeStatus;
+    type: employeeType;
 }
 
-export interface Student extends Person {
+export interface Student{
     personId: number;
     enrollmentDate: string;
-    departmentId: number;
-    course: Course;
-    status: Status;
+    courseId: number;
+    status?: studentStatus;
     section: string;
     studentType: studentType;
 }
 
-export interface Admin extends Person {
+export interface Admin {
     personId: number;
     officeId: number;
-    hireDate: string;
-    status: Status;
+    startDate: string;
+    status: employeeStatus;
+    type: employeeType;
 }
 
-export interface Faculty extends Person {
+export interface Faculty {
     personId: number;
-    hireDate: string;
-    status: Status;
+    startDate: string;
+    status: employeeStatus;
+    type: employeeType;
     departmentId: number;
 }
 
-export interface Dean extends Person {
+export interface Dean {
     personId: number;
     startDate: string;
     departmentId: number;
-    status: DeanStatus;
+    status: employeeStatus;
+    type: employeeType;
 }
 
 export interface ProgramChair {
-    id: number;
     personId: number;
-    courseId: number;
+    courseId?: number;
     startDate: string;
-    status: Status;
-}
-
-export interface Director {
-    id: number;
-    personId: number;
-    officeId: number;
-    hireDate: string;
-    status: string;
+    status: employeeStatus;
+    type: employeeType;
 }
 

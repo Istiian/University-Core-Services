@@ -22,6 +22,20 @@
       "when": 1779864267419,
       "tag": "0002_rich_daimon_hellstrom",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1779885552384,
+      "tag": "0003_ambiguous_firestar",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1779889089375,
+      "tag": "0004_dusty_victor_mancha",
+      "breakpoints": true
     }
   ]
 }

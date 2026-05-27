@@ -4,17 +4,23 @@ import {
     Response
 } from "express";
 import {
-    getRegions,
-    getProvinces,
-    getMunicipalities,
-    getBarangays
-} from "./person.service";
+    registerStudentHandler,
+    registerStaffHandler,
+    registerAdminHandler,
+    registerFacultyHandler,
+    registerProgramChairHandler,
+    registerDeanHandler
+
+} from "./person.controller";
 
 const router = Router();
 
-router.get("/regions", getRegions);
-router.get("/provinces", getProvinces);
-router.get("/municipalities", getMunicipalities);
-router.get("/barangays", getBarangays);
+router.post('/register/student', registerStudentHandler);
+router.post('/register/staff', registerStaffHandler);
+router.post('/register/admin', registerAdminHandler);
+router.post('/register/faculty', registerFacultyHandler);
+router.post('/register/dean', registerDeanHandler);
+router.post('/register/program-chair', registerProgramChairHandler);
+
 
 export default router;
