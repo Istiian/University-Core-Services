@@ -5,7 +5,7 @@ import { offices } from "./Office";
 import { relations } from "drizzle-orm";
 
 export const staff = pgTable('staff', {
-    id: integer('id').primaryKey(),
+    id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
     personId: integer('person_id').notNull().references(() => persons.id).unique(),
     officeId: integer('office_id').notNull().references(() => offices.id),
     hireDate: date('hire_date').notNull(),

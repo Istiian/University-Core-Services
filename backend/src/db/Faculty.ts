@@ -5,7 +5,7 @@ import { departments } from "./Department";
 import {relations} from "drizzle-orm";
 
 export const faculty = pgTable('faculty', {
-    id: integer('id').primaryKey(),
+    id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
     personId: integer('person_id').notNull().references(() => persons.id).unique(),
     hireDate: date('hire_date').notNull(),
     status: EmployeeStatus('status').notNull().default('active'),

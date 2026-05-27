@@ -5,7 +5,7 @@ import { EmployeeStatus, EmployeeType } from "./Enum";
 import {relations} from "drizzle-orm";
 
 export const programChairs = pgTable('program_chairs', {
-    id: integer('id').primaryKey(),
+    id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
     personId: integer('person_id').notNull().references(() => persons.id).unique(),
     courseId: integer('course_id').notNull().references(() => courses.id),
     startDate: date('start_date').notNull(),

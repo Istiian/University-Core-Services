@@ -15,6 +15,13 @@
       "when": 1779861289367,
       "tag": "0001_next_mister_sinister",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1779864267419,
+      "tag": "0002_rich_daimon_hellstrom",
+      "breakpoints": true
     }
   ]
 }

@@ -4,7 +4,7 @@ import { relations } from "drizzle-orm";
 import { programChairs } from "./Program_Chair";
 
 export const courses = pgTable('courses', {
-    id: integer('id').primaryKey(),
+    id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
     name: varchar('name', { length: 255 }).notNull().unique(),
     departmentId: integer('department_id').notNull().references(() => departments.id),
 });

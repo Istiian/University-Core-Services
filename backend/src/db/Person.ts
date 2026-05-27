@@ -8,7 +8,7 @@ import { staff } from "./Staff";
 import { students } from "./Student";
 
 export const persons = pgTable('persons', {
-    id: integer('id').primaryKey(),
+    id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
     firstName: varchar('first_name', { length: 255 }).notNull(),
     lastName: varchar('last_name', { length: 255 }).notNull(),
     middleName: varchar('middle_name', { length: 255 }),

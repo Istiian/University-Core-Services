@@ -5,7 +5,7 @@ import { courses } from "./Course";
 import { deans } from "./Dean"; 
 
 export const departments = pgTable('departments', {
-    id: integer('id').primaryKey(),
+    id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
     name: varchar('name', { length: 255 }).notNull().unique(),
 });
 
