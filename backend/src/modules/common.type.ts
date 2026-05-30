@@ -8,15 +8,18 @@ type studentType = "regular" | "irregular";
 type employeeStatus = "active" | "suspended" | "terminated" | "retired" | "resigned";
 type employeeType = "Full-time" | "Part-time" | "Contractual";
 
+type personRole = "student" | "faculty" | "admin" | "dean" | "programChair" | "staff";
+
 type address = {
     houseNumber: string;
     street: string;
     barangay: string;
     cityMunicipality: string;
     region: string;
+    province: string;
 };
 export interface Person {
-    id: number;
+    personId: number;
     firstName: string;
     lastName: string;
     middleName: string | null;
@@ -26,6 +29,7 @@ export interface Person {
     password: string;
     repeatPassword: string;
     address: address;
+    role: personRole;
 }
 export interface CollegeDepartment{
     id: number;

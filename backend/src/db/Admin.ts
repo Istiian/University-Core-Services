@@ -4,9 +4,9 @@ import { EmployeeStatus, EmployeeType } from "./Enum";
 import { offices } from "./Office";
 
 export const admins = pgTable('admins', {
-    id: serial('id').primaryKey(),
-    personId: integer('person_id').notNull().references(() => persons.id,{onDelete: 'cascade'}).unique(),
-    officeId: integer('office_id').notNull().references(() => offices.id),
+    adminId: serial('id').primaryKey(),
+    personId: integer('person_id').notNull().references(() => persons.personId,{onDelete: 'cascade'}).unique(),
+    officeId: integer('office_id').notNull().references(() => offices.officeId),
     startDate: date('start_date').notNull(),
     status: EmployeeStatus('status').notNull().default('active'),
     type: EmployeeType('type').notNull()

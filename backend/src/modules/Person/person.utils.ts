@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import { persons } from '../../db/Person';
 import { eq } from 'drizzle-orm';
-import { db } from "../../../index";
+import { db } from '../../db/client';
 
 export const hashPassword = async (password: string): Promise<string> => {
     const saltRounds = 10;

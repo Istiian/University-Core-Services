@@ -1,0 +1,1 @@
+ALTER TABLE "persons" ADD COLUMN "province" varchar(255) NOT NULL;

@@ -1,89 +1,68 @@
-// import { Status, studentType } from "./person.enum";
+export type loginRequest = {
+    email: string;
+    password: string;
+}
 
-// export enum DeanStatus {
-//     Active = "active",
-//     Inactive = "inactive"
-// }
+export type otpRequest = {
+    email: string;
+}
 
-// export interface Person {
-//     id: number;
-//     firstName: string;
-//     lastName: string;
-//     middleName: string | null;
-//     birthDate: string;
-//     contactNumber: string;
-//     email: string;
-//     password: string;
-//     houseNumber: string;
-//     street: string;
-//     barangay: string;
-//     cityMunicipality: string;
-//     region: string;
-// }
+export type resetPasswordRequest = {
+    email: string;
+    otp: string;
+    newPassword: string;
+    
+}
 
-// export interface CollegeDepartment{
-//     id: number;
-//     name: string;
-// }
+export type sendEmailRequest = {
+    to: string;
+    subject: string;
+    text: string;
+}
 
-// export interface Course {
-//     id: number;
-//     name: string;
-//     departmentId: number;
-// }
+export type tokenCredentials = {
+    personId: number;
+    role: 'student' | 'faculty' | 'admin' | 'dean' | 'programChair' | 'staff';
+    office?: string;
+    department?: string;
+    course?: string;
+}
+    
 
-// export interface Staff {
-//     id: number;
-//     personId: number;
-//     officeId: number;
-//     hireDate: string;
-//     status: Status;
-// }
+export type AuthUser = {
+    personId: number;
+    role: 'student' | 'faculty' | 'admin' | 'dean' | 'programChair' | 'staff';
+    password: string;
+    student?: {
+        course?: {
+            name: string;
+        } | null;
+    } | null;
+    faculty?: {
+        department?: {
+            name: string;
+        } | null;
+    } | null;
+    admin?: {
+        office?: {
+            name: string;
+        } | null;
+    } | null;
+    dean?: {
+        department?: {
+            name: string;
+        } | null;
+    } | null;
+    programChair?: {
+        course?: {
+            name: string;
+        } | null;
+    } | null;
+    staff?: {
+        office?: {
+            name: string;
+        } | null;
+    } | null;
+}
 
-// export interface Student extends Person {
-//     personId: number;
-//     enrollmentDate: string;
-//     departmentId: number;
-//     course: Course;
-//     status: Status;
-//     section: string;
-//     studentType: studentType;
-// }
-
-// export interface Admin extends Person {
-//     personId: number;
-//     officeId: number;
-//     hireDate: string;
-//     status: Status;
-// }
-
-// export interface Faculty extends Person {
-//     personId: number;
-//     hireDate: string;
-//     status: Status;
-//     departmentId: number;
-// }
-
-// export interface Dean extends Person {
-//     personId: number;
-//     startDate: string;
-//     departmentId: number;
-//     status: DeanStatus;
-// }
-
-// export interface ProgramChair {
-//     id: number;
-//     personId: number;
-//     courseId: number;
-//     startDate: string;
-//     status: Status;
-// }
-
-// export interface Director {
-//     id: number;
-//     personId: number;
-//     officeId: number;
-//     hireDate: string;
-//     status: string;
-// }
 

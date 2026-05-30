@@ -3,7 +3,7 @@ import { departments } from "./Department";
 
 
 export const courses = pgTable('courses', {
-    id: serial('id').primaryKey(),
+    courseId: serial('id').primaryKey(),
     name: varchar('name', { length: 255 }).notNull().unique(),
-    departmentId: integer('department_id').notNull().references(() => departments.id),
+    departmentId: integer('department_id').notNull().references(() => departments.departmentId),
 });

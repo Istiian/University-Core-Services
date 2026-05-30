@@ -36,7 +36,9 @@ export const recordPersonalInfo = async (personData: Person, trx?: any) => {
             street: personData.address.street,
             barangay: personData.address.barangay,
             cityMunicipality: personData.address.cityMunicipality,
-            region: personData.address.region
+            region: personData.address.region,
+            province: personData.address.province,
+            role: personData.role
         }).returning();
 
         return person;

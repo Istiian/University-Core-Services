@@ -12,27 +12,27 @@ import { departments } from './Department';
 
 export const personsRelations = relations(persons, ({ one }) => ({
   admin: one(admins,{
-    fields: [persons.id], 
+    fields: [persons.personId], 
     references: [admins.personId]
   }),
   dean: one(deans,{
-    fields: [persons.id], 
+    fields: [persons.personId], 
     references: [deans.personId]
   }),
   faculty: one(faculty,{
-    fields: [persons.id], 
+    fields: [persons.personId], 
     references: [faculty.personId]
   }),
   programChair: one(programChairs,{
-    fields: [persons.id], 
+    fields: [persons.personId], 
     references: [programChairs.personId]
   }),
   staff: one(staff,{
-    fields: [persons.id], 
+    fields: [persons.personId], 
     references: [staff.personId]
   }),
   student: one(students,{
-    fields: [persons.id], 
+    fields: [persons.personId], 
     references: [students.personId]
   }),
 }));
@@ -40,54 +40,66 @@ export const personsRelations = relations(persons, ({ one }) => ({
 export const adminsRelations = relations(admins, ({ one }) => ({
   person: one(persons, {
     fields: [admins.personId], 
-    references: [persons.id]
+    references: [persons.personId]
   }),
-  office: one(offices),
+  office: one(offices,{
+    fields: [admins.officeId],
+    references: [offices.officeId]
+  }),
 }));
 
 export const deansRelations = relations(deans, ({ one }) => ({
   person: one(persons, {
     fields: [deans.personId], 
-    references: [persons.id]
+    references: [persons.personId]
   }),
-  department: one(departments),
+  department: one(departments,{
+    fields: [deans.departmentId], 
+    references: [departments.departmentId]
+  }),
 }));
 
 export const facultyRelations = relations(faculty, ({ one }) => ({
   person: one(persons, {
     fields: [faculty.personId], 
-    references: [persons.id]
+    references: [persons.personId]
   }),
-  department: one(departments),
+  department: one(departments,{
+    fields: [faculty.departmentId], 
+    references: [departments.departmentId]
+  }),
 }));
 
 export const programChairsRelations = relations(programChairs, ({ one }) => ({
   person: one(persons, {
     fields: [programChairs.personId], 
-    references: [persons.id]
+    references: [persons.personId]
   }),
   course: one(courses,{
     fields: [programChairs.courseId], 
-    references: [courses.id]
+    references: [courses.courseId]
   }),
 }));
 
-export const staffRelations = relations(staff, ({ one, many }) => ({
+export const staffRelations = relations(staff, ({ one }) => ({
   person: one(persons, {
     fields: [staff.personId], 
-    references: [persons.id]
+    references: [persons.personId]
   }),
-  office: many(offices),
+  office: one(offices,{
+    fields: [staff.officeId],
+    references: [offices.officeId]
+  }),
 }));
 
 export const studentsRelations = relations(students, ({ one }) => ({
   person: one(persons, {
     fields: [students.personId], 
-    references: [persons.id]
+    references: [persons.personId]
   }),
   course: one(courses, {
     fields: [students.courseId], 
-    references: [courses.id]
+    references: [courses.courseId ]
   }),
 }));
 
@@ -99,7 +111,7 @@ export const officesRelations = relations(offices, ({ many }) => ({
 export const coursesRelations = relations(courses, ({ one }) => ({
   department: one(departments,{
     fields: [courses.departmentId], 
-    references: [departments.id]
+    references: [departments.departmentId]
   }),
 }));
 
