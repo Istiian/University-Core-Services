@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import personRoutes from './src/modules/Person/person.routes';
 import authRoutes from './src/modules/auth/auth.routes';
 import { errorMiddleware } from './src/middleware/errorHandler';
-// import { db } from './src/db/client';
+import courseRoutes from './src/modules/course/course.routes';
 import studentRoutes from './src/modules/Student/student.router';
 
 dotenv.config();
@@ -13,6 +13,7 @@ app.use(express.json());
 app.use('/api/person', personRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/student', studentRoutes);
+app.use('/api/course', courseRoutes);
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Hello, Worldd!');
