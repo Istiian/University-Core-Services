@@ -5,6 +5,8 @@ import authRoutes from './src/modules/auth/auth.routes';
 import courseRoutes from './src/modules/course/course.routes';
 import studentRoutes from './src/modules/Student/student.router';
 import departmentRoutes from './src/modules/department/department.routes';
+import staffRoutes from './src/modules/Staff/staff.router';
+import facultyRoutes from './src/modules/Faculty/faculty.router';
 import { errorMiddleware } from './src/middleware/errorHandler';
 
 dotenv.config();
@@ -16,6 +18,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/student', studentRoutes);
 app.use('/api/course', courseRoutes);
 app.use('/api/department', departmentRoutes);
+app.use('/api/staff', staffRoutes);
+app.use('/api/faculty', facultyRoutes);
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Hello, Worldd!');
