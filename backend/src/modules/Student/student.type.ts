@@ -15,3 +15,14 @@ export interface Student {
     personalData: Person;
     studentData: StudentInfo;
 }
+
+export type StudentFilter = {
+    status?: studentStatus;
+    role?: string;
+    courseId?: number;
+    section?: string;
+    studentType?: studentType;
+    search?: string;
+    enrollmentDate?: string;
+    // add other attributes as needed
+};

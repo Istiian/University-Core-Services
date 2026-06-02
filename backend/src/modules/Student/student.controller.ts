@@ -2,11 +2,8 @@ import { getStudents } from './student.service';
 import { NextFunction, Request, Response } from 'express';
 import { AppError } from "../../middleware/app-error";
 import { Person, Student } from '../common.type';
-import { recordPersonalInfo, updatePersonalInfo } from '../Person/person.service';
 import { registerStudent, updateStudentInfo, deleteStudentInfo } from './student.service';
-import { checkUserExists } from '../common.utils';
-import { checkRepeatPassword } from '../common.utils';
-import { db } from '../../db/client';
+import {generateCredentialSlip} from '../common.utils';
 
 export const listStudentsHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -19,7 +16,8 @@ export const listStudentsHandler = async (req: Request, res: Response, next: Nex
         if (req.query.studentType) filter.studentType = req.query.studentType as string;
         if (req.query.studentStatus) filter.studentStatus = req.query.studentStatus as string;
         if (req.query.courseId) filter.courseId = parseInt(req.query.courseId as string);
-    
+        if (req.query.search) filter.search = req.query.search as string;
+        
         console.log("Received filters:", filter);
         const students = await getStudents(page, limit, filter)
         res.json(students);
@@ -32,13 +30,13 @@ export const registerStudentHandler = async (req: Request, res: Response, next: 
     try {
         const { personalData, studentData }: { personalData: Person, studentData: Student } = req.body;
         const data = await registerStudent({ personalData, studentData });
+        const credentialSlip = generateCredentialSlip(data.person.username, data.password);
 
-        res.status(201).json({
-            success: true,
-            message: "Student registered successfully",
-            person: data.person,
-            student: data.student
-        });
+        res.setHeader("Content-Type", "application/pdf");
+        res.setHeader("Content-Disposition", 'attachment; filename="account-slip.pdf"');
+        credentialSlip.pipe(res);
+        credentialSlip.end();
+        
     } catch (error) {
         next(error instanceof AppError ? error : new AppError('Failed to register student', 500));
     }
@@ -54,13 +52,11 @@ export const updateStudentInfoHandler = async (req: Request, res: Response, next
         if (Number.isNaN(studentId)){
             return next(new AppError('Invalid studentId', 400));
         } 
-
+        console.log("Updating student with ID:", studentId);
         const data = await updateStudentInfo(studentId, { personalData, studentData });
         res.status(200).json({
             success: true,
             message: "Student information updated successfully",
-            person: data.updatedPersonalInfo,
-            student: data.updatedStudentInfo
         });
     } catch (error) {
         next(error instanceof AppError ? error : new AppError('Failed to update student', 500));
