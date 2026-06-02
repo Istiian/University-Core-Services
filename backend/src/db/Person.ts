@@ -1,5 +1,6 @@
 import { pgTable, varchar, date, serial } from "drizzle-orm/pg-core";
 import { personRole } from "./Enum";
+import { sql } from "drizzle-orm";
 
 export const persons = pgTable('persons', {
     personId: serial('id').primaryKey(),
@@ -8,8 +9,9 @@ export const persons = pgTable('persons', {
     middleName: varchar('middle_name', { length: 255 }),
     birthDate: date('birth_date').notNull(),
     contactNumber: varchar('contact_number', { length: 20 }).notNull(),
-    email: varchar('email', { length: 255 }).notNull().unique(),
-    password: varchar('password', { length: 255 }).notNull(),
+    email: varchar('email', { length: 255 }).notNull(),
+    username: varchar('username', { length: 255 }).notNull().unique().default(sql``),
+    password: varchar('password', { length: 255 }).notNull().default(sql``),
     houseNumber: varchar('house_number', { length: 255 }).notNull(),
     street: varchar('street', { length: 255 }).notNull(),
     barangay: varchar('barangay', { length: 255 }).notNull(),

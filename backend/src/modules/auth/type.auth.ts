@@ -1,14 +1,14 @@
 export type loginRequest = {
-    email: string;
+    username: string;
     password: string;
 }
 
 export type otpRequest = {
-    email: string;
+    username: string;
 }
 
 export type resetPasswordRequest = {
-    email: string;
+    username: string;
     otp: string;
     newPassword: string;
     

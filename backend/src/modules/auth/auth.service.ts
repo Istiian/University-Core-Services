@@ -10,9 +10,9 @@ import { sendEmail } from '../common.utils';
 
 export const login = async (loginData: loginRequest) => {
     try {
-
+        
         const user = await db.query.persons.findFirst({
-            where: eq(persons.email, loginData.email),
+            where: eq(persons.username, loginData.username),
             columns: { personId: true, role: true, password: true },
             with: {
                 student: {
@@ -75,6 +75,7 @@ export const login = async (loginData: loginRequest) => {
         if (!user) {
             throw new AppError('User not found', 404);
         }
+        console.log('User found:', user);
         const isMatch = await verifyPassword(loginData.password, user.password);
         if (!isMatch) {
             throw new AppError('Invalid credentials', 401);
@@ -133,12 +134,12 @@ export const refreshAccessToken = async (refreshToken: string) => {
 
 export const sendOTP = async (otpData: otpRequest) => {
     try{
-        const email = otpData.email;
+        const username = otpData.username;
         const user = await db.query.persons.findFirst({
-            where: eq(persons.email, email),
-            columns: { personId: true },
+            where: eq(persons.username, username),
+            columns: { personId: true, email: true },
         });
-        
+        console.log('User found for OTP:', user);
         const checkExistingOTP = await redisClient.get(`otp:${user?.personId}`);
 
         if (checkExistingOTP) {
@@ -151,7 +152,7 @@ export const sendOTP = async (otpData: otpRequest) => {
         const otp = generateOTP();
         const sendOtpEmail = await sendEmail(
             {
-                to: email,
+                to: user?.email,
                 subject: 'Your OTP Code',
                 text: `Your OTP code is: ${otp}`
             }
@@ -169,10 +170,10 @@ export const sendOTP = async (otpData: otpRequest) => {
 
 export const resetPassword = async (resetData: resetPasswordRequest) => {
     try {
-        const { email, otp, newPassword } = resetData;
+        const { username, otp, newPassword } = resetData;
        
         const user = await db.query.persons.findFirst({
-            where: eq(persons.email, email),
+            where: eq(persons.username, username),
             columns: { personId: true },
         });
 

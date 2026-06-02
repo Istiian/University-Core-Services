@@ -9,16 +9,16 @@ const passwordSchema = zod
     .regex(/[^A-Za-z0-9]/, "Password must contain at least one special character");
 
 export const loginSchema = zod.object({
-    email: zod.string().email(),
+    username: zod.string(),
     password: zod.string(),
 });
 
 export const requestPasswordResetSchema = zod.object({
-    email: zod.string().email(),
+    username: zod.string(),
 });
 
 export const resetPasswordSchema = zod.object({
-    email: zod.string().email(),
+    username: zod.string(),
     otp: zod.string().length(6),
     newPassword: passwordSchema,
     repeatNewPassword: passwordSchema,

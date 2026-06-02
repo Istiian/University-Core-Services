@@ -63,9 +63,9 @@ export const refreshTokenHandler = async (req: Request, res: Response, next: Nex
 
 export const sendOTPHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { email } = req.body;
-        console.log('Email for OTP:', email);
-        const otp = await sendOTP({ email });
+        const { username } = req.body;
+        
+        const otp = await sendOTP({ username });
 
         res.json({
             success: true,
@@ -80,13 +80,13 @@ export const sendOTPHandler = async (req: Request, res: Response, next: NextFunc
 
 export const resetPasswordHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { email, otp, newPassword, repeatNewPassword } = req.body;
+        const { username, otp, newPassword, repeatNewPassword } = req.body;
        
         if (newPassword !== repeatNewPassword) {
             throw new AppError('Passwords do not match', 400);
         }
 
-        const resetData = { email, otp, newPassword };
+        const resetData = { username, otp, newPassword };
         const result = await resetPassword(resetData);
 
         res.json({
