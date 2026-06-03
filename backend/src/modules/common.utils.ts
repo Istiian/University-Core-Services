@@ -58,3 +58,11 @@ export const generateCredentialSlip = ( username: string, password: string) => {
     doc.text('For questions, please contact the administrator.', { align: 'center' });
     return doc;
 }
+
+export const veritfyParam = (param: string, paramName: string): number => {
+    const paramValue = parseInt(param, 10);
+    if (Number.isNaN(paramValue)) {
+        throw new AppError(`Invalid ${paramName}`, 400);
+    }
+    return paramValue;
+}

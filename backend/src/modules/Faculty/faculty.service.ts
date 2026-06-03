@@ -36,7 +36,7 @@ export const createFaculty = async (facultyData: Faculty) => {
                 cityMunicipality: facultyData.personalData.address.cityMunicipality,
                 region: facultyData.personalData.address.region,
                 province: facultyData.personalData.address.province,
-                role: 'faculty'
+                role: 3
             }).returning({ id: persons.personId, username: persons.username });
 
             await tx.insert(faculty).values({
@@ -59,11 +59,9 @@ export const createFaculty = async (facultyData: Faculty) => {
     }
 };
 
-export const getFaculty = async (page: number, limit: number, filter: FacultyFilter = {}) => {
+export const listFaculties = async (page: number, limit: number, filter: FacultyFilter = {}) => {
     try {
         const facultyWhereClause: any[] = [];
-        if (filter.facultyId) facultyWhereClause.push(eq(faculty.facultyId, filter.facultyId));
-        if (filter.personId) facultyWhereClause.push(eq(faculty.personId, filter.personId));
         if (filter.departmentId) facultyWhereClause.push(eq(faculty.departmentId, filter.departmentId));
         if (filter.startDate) facultyWhereClause.push(ilike(faculty.startDate, `%${filter.startDate}%`));
         if (filter.status) facultyWhereClause.push(eq(faculty.status, filter.status));
@@ -100,6 +98,25 @@ export const getFaculty = async (page: number, limit: number, filter: FacultyFil
         throw error;
     }
 };
+
+export const getFacultyById = async (facultyId: number) =>{
+    try {
+        const result = await db.query.faculty.findFirst({
+            where: eq(faculty.facultyId, facultyId),
+            with: {
+                person: {
+                    columns: {
+                        password: false
+                    }
+                },
+                department: true,
+            },
+        });
+        return result;
+    } catch (error) {
+        throw error;
+    }
+}
 
 export const updateFaculty = async (facultyId: number, facultyData: Partial<Faculty>) => {
     try {

@@ -6,7 +6,7 @@ import { checkRepeatPassword, checkUserExists, hashPassword } from "../common.ut
 import { Student, StudentFilter } from "./student.type";
 import { and, eq, ilike, ne, or } from "drizzle-orm";
 
-export const getStudents = async (page: number, limit: number, filter: StudentFilter = {}) => {
+export const getAllStudents = async (page: number, limit: number, filter: StudentFilter = {}) => {
     const offset = (page - 1) * limit;
     const studentWhereClause: any = []
     if (filter.status) studentWhereClause.push(eq(students.status, filter.status))
@@ -47,6 +47,21 @@ export const getStudents = async (page: number, limit: number, filter: StudentFi
     }
 };
 
+export const getStudentById = async (studentId: number) => {
+    try {
+        const student = await db.query.students.findFirst({
+            where: eq(students.studentId, studentId),
+            with: {
+                person: { columns: { password: false } },
+                course: { columns: { name: true } }
+            }
+        });
+        return student;
+    } catch (error) {
+        console.error('Error fetching student:', error);
+        throw error instanceof AppError ? error : new AppError('Failed to fetch student', 500);
+    }
+};
 
 export const registerStudent = async (studentData: Student) => {
     try {
@@ -72,7 +87,7 @@ export const registerStudent = async (studentData: Student) => {
                 cityMunicipality: studentData.personalData.address.cityMunicipality,
                 region: studentData.personalData.address.region,
                 province: studentData.personalData.address.province,
-                role: "student"
+                role: 1
             }).returning({ id: persons.personId, username: persons.username });
 
             const student = await trx.insert(students).values({

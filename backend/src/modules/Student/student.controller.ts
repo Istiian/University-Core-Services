@@ -1,9 +1,9 @@
-import { getStudents } from './student.service';
+
 import { NextFunction, Request, Response } from 'express';
 import { AppError } from "../../middleware/app-error";
 import { Person, Student } from '../common.type';
-import { registerStudent, updateStudentInfo, deleteStudentInfo } from './student.service';
-import {generateCredentialSlip} from '../common.utils';
+import { getAllStudents, registerStudent, updateStudentInfo, deleteStudentInfo, getStudentById } from './student.service';
+import {generateCredentialSlip, veritfyParam} from '../common.utils';
 
 export const listStudentsHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -18,12 +18,33 @@ export const listStudentsHandler = async (req: Request, res: Response, next: Nex
         if (req.query.courseId) filter.courseId = parseInt(req.query.courseId as string);
         if (req.query.search) filter.search = req.query.search as string;
         
-        const students = await getStudents(page, limit, filter)
+        const students = await getAllStudents(page, limit, filter)
         res.json(students);
     } catch (error) {
         next(error instanceof AppError ? error : new AppError('Failed to fetch students', 500));
     }
 };
+
+export const getStudentByIdHandler = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const studentIdParam = Array.isArray(req.params.studentId) ? req.params.studentId[0] : req.params.studentId;
+        // if (!studentIdParam) return next(new AppError('Missing studentId parameter', 400));
+        // const studentId = parseInt(studentIdParam, 10);
+        // if (Number.isNaN(studentId)){
+        //     return next(new AppError('Invalid studentId', 400));
+        // }
+        const studentId = veritfyParam(studentIdParam, 'studentId');
+        const student = await getStudentById(studentId);
+        if (!student) {
+            return next(new AppError('Student not found', 404));
+
+        }
+        res.json(student);
+    } catch (error) {
+        next(error instanceof AppError ? error : new AppError('Failed to fetch student', 500));
+    }
+};
+
 
 export const registerStudentHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -46,12 +67,8 @@ export const updateStudentInfoHandler = async (req: Request, res: Response, next
         const { personalData, studentData }: { personalData: Person, studentData: Student } = req.body;
         const studentIdParam = Array.isArray(req.params.studentId) ? req.params.studentId[0] : req.params.studentId;
         if (!studentIdParam) return next(new AppError('Missing studentId parameter', 400));
-        const studentId = parseInt(studentIdParam, 10);
 
-        if (Number.isNaN(studentId)){
-            return next(new AppError('Invalid studentId', 400));
-        } 
-        
+        const studentId = veritfyParam(studentIdParam, 'studentId');
         const data = await updateStudentInfo(studentId, { personalData, studentData });
         res.status(200).json({
             success: true,
@@ -67,11 +84,7 @@ export const deleteStudentHandler = async (req: Request, res: Response, next: Ne
         const studentIdParam = Array.isArray(req.params.studentId) ? req.params.studentId[0] : req.params.studentId;
         if (!studentIdParam) return next(new AppError('Missing studentId parameter', 400));
         
-        const studentId = parseInt(studentIdParam, 10);
-        
-        if (Number.isNaN(studentId)){
-            return next(new AppError('Invalid studentId', 400));
-        }
+        const studentId = veritfyParam(studentIdParam, 'studentId');
         const deletedStudent = await deleteStudentInfo(studentId);
 
         res.status(200).json({

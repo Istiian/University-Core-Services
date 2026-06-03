@@ -36,7 +36,7 @@ export const createProgramChair = async (programChairData: ProgramChair) => {
                 cityMunicipality: programChairData.personalData.address.cityMunicipality,
                 region: programChairData.personalData.address.region,
                 province: programChairData.personalData.address.province,
-                role: 'programChair',
+                role: 6,
             }).returning({ id: persons.personId, username: persons.username });
 
             await tx.insert(programChairs).values({
@@ -59,11 +59,9 @@ export const createProgramChair = async (programChairData: ProgramChair) => {
     }
 };
 
-export const getProgramChair = async (page: number, limit: number, filter: ProgramChairFilter = {}) => {
+export const listProgramChairs = async (page: number, limit: number, filter: ProgramChairFilter = {}) => {
     try {
         const programChairWhereClause: any[] = [];
-        if (filter.programChairId) programChairWhereClause.push(eq(programChairs.programChairId, filter.programChairId));
-        if (filter.personId) programChairWhereClause.push(eq(programChairs.personId, filter.personId));
         if (filter.courseId) programChairWhereClause.push(eq(programChairs.courseId, filter.courseId));
         if (filter.startDate) programChairWhereClause.push(ilike(programChairs.startDate, `%${filter.startDate}%`));
         if (filter.status) programChairWhereClause.push(eq(programChairs.status, filter.status));
@@ -96,6 +94,25 @@ export const getProgramChair = async (page: number, limit: number, filter: Progr
         });
 
         return result;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const getProgramChairById = async (programChairId: number) => {
+    try {
+        const result = await db.query.programChairs.findFirst({
+            where: eq(programChairs.programChairId, programChairId),
+            with: {
+                person: {
+                    columns: {
+                        password: false
+                    }
+                },
+                course: true,
+            }
+        });
+        return result || null;
     } catch (error) {
         throw error;
     }

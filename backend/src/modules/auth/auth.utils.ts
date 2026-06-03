@@ -69,7 +69,7 @@ export const verifyOTP = async (personId: number, otp: string): Promise<boolean>
 
 export const formatTokenCredentials = (userData: AuthUser): tokenCredentials => {
     switch (userData.role) {
-        case 'student':
+        case 2:
             return {
                 studentId: userData.student?.studentId,
                 personId: userData.personId,
@@ -77,35 +77,35 @@ export const formatTokenCredentials = (userData: AuthUser): tokenCredentials => 
                 course: userData.student?.course?.name
             };
         // Add cases for other roles as needed
-        case 'faculty':
+        case 3:
             return {
                 facultyId: userData.faculty?.facultyId,
                 personId: userData.personId,
                 role: userData.role,
                 department: userData.faculty?.department?.name
             };
-        case 'admin':
+        case 1:
             return {
                 adminId: userData.admin?.adminId,
                 personId: userData.personId,
                 role: userData.role,
                 office: userData.admin?.office?.name
             };
-        case 'dean':
+        case 5:
             return {
                 deanId: userData.dean?.deanId,
                 personId: userData.personId,
                 role: userData.role,
                 department: userData.dean?.department?.name
             };
-        case 'programChair':
+        case 6:
             return {
                 programChairId: userData.programChair?.programChairId,
                 personId: userData.personId,
                 role: userData.role,
                 course: userData.programChair?.course?.name
             };
-        case 'staff':
+        case 4:
             return {
                 staffId: userData.staff?.staffId,
                 personId: userData.personId,

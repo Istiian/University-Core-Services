@@ -22,7 +22,7 @@ export type sendEmailRequest = {
 
 export type tokenCredentials = {
     personId: number;
-    role: 'student' | 'faculty' | 'admin' | 'dean' | 'programChair' | 'staff';
+    role: number;
     office?: string;
     department?: string;
     course?: string;
@@ -37,7 +37,7 @@ export type tokenCredentials = {
 
 export type AuthUser = {
     personId: number;
-    role: 'student' | 'faculty' | 'admin' | 'dean' | 'programChair' | 'staff';
+    role: number;
     password: string;
     student?: {
         studentId: number;

@@ -11,7 +11,6 @@ import { AppError } from '../../middleware/app-error';
 export const createStaff = async (staffData: Staff) => {
     try {
         if (await checkUserExists(staffData.personalData.email)) {
-
             throw new AppError("User with this email already exists", 400);
         }
 
@@ -19,10 +18,14 @@ export const createStaff = async (staffData: Staff) => {
         const hashedPassword = await hashPassword(generatedPassword);
 
         const result = await db.transaction(async (tx) => {
-            const checkEmailExists = await tx.select().from(persons).where(eq(persons.email, staffData.personalData.email));
-            if (checkEmailExists) {
+
+            
+        const checkEmailExists = await tx.select().from(persons).where(eq(persons.email, staffData.personalData.email));
+        
+            if (checkEmailExists.length > 0) {
                 throw new AppError("User with this email already exists", 400);
             }
+
             const [person] = await tx.insert(persons).values({
                 firstName: staffData.personalData.firstName,
                 lastName: staffData.personalData.lastName,
@@ -37,7 +40,7 @@ export const createStaff = async (staffData: Staff) => {
                 cityMunicipality: staffData.personalData.address.cityMunicipality,
                 region: staffData.personalData.address.region,
                 province: staffData.personalData.address.province,
-                role: "staff"
+                role: 4
             }).returning({ id: persons.personId, username: persons.username });
 
             const newStaff = await tx.insert(staff).values({
@@ -59,11 +62,9 @@ export const createStaff = async (staffData: Staff) => {
     }
 }
 
-export const getStaff = async (page: number, limit: number, filter: StaffFilter = {}) => {
+export const listStaff = async (page: number, limit: number, filter: StaffFilter = {}) => {
     try {
         const staffWhereClause: any = [];
-        if (filter.staffId) staffWhereClause.push(eq(staff.staffId, filter.staffId));
-        if (filter.personId) staffWhereClause.push(eq(staff.personId, filter.personId));
         if (filter.officeId) staffWhereClause.push(eq(staff.officeId, filter.officeId));
         if (filter.startDate) staffWhereClause.push(ilike(staff.startDate, `%${filter.startDate}%`));
         if (filter.status) staffWhereClause.push(eq(staff.status, filter.status));
@@ -100,6 +101,26 @@ export const getStaff = async (page: number, limit: number, filter: StaffFilter 
         throw error
     }
 }
+
+export const getStaffById = async (staffId: number) => {
+    try {
+        const result = await db.query.staff.findFirst({ 
+            where: eq(staff.staffId, staffId),
+            with: {
+                person: {
+                    columns: {
+                        password: false
+                    }
+                },
+                office: true,
+            }
+        });
+        return result || null;
+    } catch (error) {
+        throw error
+    }
+}
+
 
 export const updateStaff = async (staffId: number, staffData: Partial<Staff>) => {
     try {

@@ -36,7 +36,7 @@ export const createAdmin = async (adminData: Admin) => {
                 cityMunicipality: adminData.personalData.address.cityMunicipality,
                 region: adminData.personalData.address.region,
                 province: adminData.personalData.address.province,
-                role: 'admin',
+                role: 1,
             }).returning({ id: persons.personId, username: persons.username });
 
             await tx.insert(admins).values({
@@ -59,11 +59,9 @@ export const createAdmin = async (adminData: Admin) => {
     }
 };
 
-export const getAdmin = async (page: number, limit: number, filter: AdminFilter = {}) => {
+export const listAdmins = async (page: number, limit: number, filter: AdminFilter = {}) => {
     try {
         const adminWhereClause: any[] = [];
-        if (filter.adminId) adminWhereClause.push(eq(admins.adminId, filter.adminId));
-        if (filter.personId) adminWhereClause.push(eq(admins.personId, filter.personId));
         if (filter.officeId) adminWhereClause.push(eq(admins.officeId, filter.officeId));
         if (filter.startDate) adminWhereClause.push(ilike(admins.startDate, `%${filter.startDate}%`));
         if (filter.status) adminWhereClause.push(eq(admins.status, filter.status));
@@ -96,6 +94,25 @@ export const getAdmin = async (page: number, limit: number, filter: AdminFilter 
         });
 
         return result;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const getAdminById = async (adminId: number) => {
+    try {
+        const result = await db.query.admins.findFirst({
+            where: eq(admins.adminId, adminId),
+            with: {
+                person: {
+                    columns: {
+                        password: false
+                    },
+                },
+                office: true,
+            },
+        });
+        return result || null;
     } catch (error) {
         throw error;
     }

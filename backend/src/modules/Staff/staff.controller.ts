@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { AppError } from '../../middleware/app-error';
-import { createStaff, getStaff, updateStaff, deleteStaff } from './staff.service';
+import { createStaff, listStaff,getStaffById, updateStaff, deleteStaff } from './staff.service';
 import { StaffInfo } from './staff.type';
 import { Person } from '../common.type';
 import { generateCredentialSlip } from '../common.utils';
+import { veritfyParam } from '../common.utils';
 
 export const createStaffHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -22,7 +23,7 @@ export const createStaffHandler = async (req: Request, res: Response, next: Next
     }
 };
 
-export const getStaffHandler = async (req: Request, res: Response, next: NextFunction) => {
+export const listStaffHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const page = parseInt(req.query.page as string) || 1;
         const limit = parseInt(req.query.limit as string) || 25;
@@ -36,7 +37,7 @@ export const getStaffHandler = async (req: Request, res: Response, next: NextFun
         if (req.query.type) filter.type = req.query.type as string;
         if (req.query.search) filter.search = req.query.search as string;
         
-        const staffList = await getStaff(page, limit, filter);
+        const staffList = await listStaff(page, limit, filter);
         
         res.status(200).json({
             message: 'Staff retrieved successfully',
@@ -49,6 +50,30 @@ export const getStaffHandler = async (req: Request, res: Response, next: NextFun
     }
 }
 
+export const getStaffByIdHandler = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const staffIdParam = Array.isArray(req.params.staffId) ? req.params.staffId[0] : req.params.staffId;
+        if (!staffIdParam) {
+            return next(new AppError('Missing staffId parameter', 400));
+        }
+        const staffId = veritfyParam(staffIdParam, 'staffId');
+        const staff = await getStaffById(staffId);
+
+        if (!staff) {
+            return next(new AppError('Staff not found', 404));
+        }
+        res.status(200).json({
+            message: 'Staff retrieved successfully',
+            success: true,
+            staff: staff
+        });
+    } catch (error) {
+        if (error instanceof AppError) return next(error);
+        next(new AppError('Failed to retrieve staff', 500));
+    }
+}
+        
+
 export const updateStaffHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const staffIdParam = Array.isArray(req.params.staffId) ? req.params.staffId[0] : req.params.staffId;
@@ -56,11 +81,7 @@ export const updateStaffHandler = async (req: Request, res: Response, next: Next
             return next(new AppError('Missing staffId parameter', 400));
         }
 
-        const staffId = parseInt(staffIdParam, 10);
-        if (Number.isNaN(staffId)) {
-            return next(new AppError('Invalid staffId', 400));
-        }
-
+        const staffId = veritfyParam(staffIdParam, 'staffId');
         const { staffData, personalData }: { staffData: StaffInfo, personalData: Person } = req.body;
         const updatedStaff = await updateStaff(staffId, { staffData, personalData });
        
@@ -82,10 +103,7 @@ export const deleteStaffHandler = async (req: Request, res: Response, next: Next
             return next(new AppError('Missing staffId parameter', 400));
         }
         
-        const staffId = parseInt(staffIdParam, 10);
-        if (Number.isNaN(staffId)) {
-            return next(new AppError('Invalid staffId', 400));
-        }
+        const staffId = veritfyParam(staffIdParam, 'staffId');
         
         const deletedStaff = await deleteStaff(staffId);
         if (!deletedStaff) {

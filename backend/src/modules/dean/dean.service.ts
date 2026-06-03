@@ -35,7 +35,7 @@ export const createDean = async (deanData: Dean) => {
                 cityMunicipality: deanData.personalData.address.cityMunicipality,
                 region: deanData.personalData.address.region,
                 province: deanData.personalData.address.province,
-                role: 'dean',
+                role: 5,
             }).returning({ id: persons.personId, username: persons.username });
 
             await tx.insert(deans).values({
@@ -58,11 +58,9 @@ export const createDean = async (deanData: Dean) => {
     }
 };
 
-export const getDean = async (page: number, limit: number, filter: DeanFilter = {}) => {
+export const listDeans = async (page: number, limit: number, filter: DeanFilter = {}) => {
     try {
         const deanWhereClause: any[] = [];
-        if (filter.deanId) deanWhereClause.push(eq(deans.deanId, filter.deanId));
-        if (filter.personId) deanWhereClause.push(eq(deans.personId, filter.personId));
         if (filter.departmentId) deanWhereClause.push(eq(deans.departmentId, filter.departmentId));
         if (filter.startDate) deanWhereClause.push(ilike(deans.startDate, `%${filter.startDate}%`));
         if (filter.status) deanWhereClause.push(eq(deans.status, filter.status));
@@ -95,6 +93,25 @@ export const getDean = async (page: number, limit: number, filter: DeanFilter = 
         });
 
         return result;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const getDeanById = async (deanId: number) => {
+    try {
+        const result = await db.query.deans.findFirst({
+            where: eq(deans.deanId, deanId),
+            with: {
+                person: {
+                    columns: {
+                        password: false
+                    },
+                },
+                department: true,
+            },
+        });
+        return result || null;
     } catch (error) {
         throw error;
     }

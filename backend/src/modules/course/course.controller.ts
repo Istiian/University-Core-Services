@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { createCourse, getCourse, updateCourse, deleteCourse } from './course.service';
 import { AppError } from '../../middleware/app-error';
+import { veritfyParam } from '../common.utils';
 
 export const createCourseHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -40,11 +41,7 @@ export const updateCourseHandler = async (req: Request, res: Response, next: Nex
             return next(new AppError('Missing courseId parameter', 400));
         }
 
-        const courseId = parseInt(courseIdParam, 10);
-        if (Number.isNaN(courseId)) {
-            return next(new AppError('Invalid courseId', 400));
-        }
-
+        const courseId = veritfyParam(courseIdParam, 'courseId');
         const courseData = req.body;
         const updatedCourse = await updateCourse(courseId, courseData);
         if (!updatedCourse) {
@@ -66,11 +63,7 @@ export const deleteCourseHandler = async (req: Request, res: Response, next: Nex
         if (!courseIdParam) {
             return next(new AppError('Missing courseId parameter', 400));
         }
-        const courseId = parseInt(courseIdParam, 10);
-        if (Number.isNaN(courseId)) {
-            return next(new AppError('Invalid courseId', 400));
-
-        }
+        const courseId = veritfyParam(courseIdParam, 'courseId');
         const deletedCourse = await deleteCourse(courseId);
         if (!deletedCourse) {
             return next(new AppError('Course not found', 404));
