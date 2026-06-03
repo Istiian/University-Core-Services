@@ -31,10 +31,7 @@ export const getStudents = async (page: number, limit: number, filter: StudentFi
                 person: {
                     where: or(...personWhereClause),
                     columns: {
-                        firstName: true, lastName: true, email: true, 
-                        contactNumber: true, birthDate: true, personId: true,
-                        houseNumber: true, street: true, barangay: true, cityMunicipality: true,
-                        region: true, province: true, username: true
+                        password: false
                     }
                 },
                 course: { columns: { name: true } }

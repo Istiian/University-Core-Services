@@ -85,19 +85,7 @@ export const getDean = async (page: number, limit: number, filter: DeanFilter = 
                 person: {
                     where: or(...personWhereClause),
                     columns: {
-                        firstName: true,
-                        lastName: true,
-                        email: true,
-                        contactNumber: true,
-                        birthDate: true,
-                        personId: true,
-                        houseNumber: true,
-                        street: true,
-                        barangay: true,
-                        cityMunicipality: true,
-                        region: true,
-                        province: true,
-                        username: true,
+                        password: false
                     },
                 },
                 department: true,
