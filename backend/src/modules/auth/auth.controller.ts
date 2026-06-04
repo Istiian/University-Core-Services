@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { login, refreshAccessToken, deleteRefreshTokens, sendOTP,resetPassword } from "./auth.service";
+import { login, refreshAccessToken, deleteRefreshTokens, sendOTP, resetPassword, changePassword } from "./auth.service";
 import { generateAccessToken, verifyAccessToken, verifyRefreshToken } from "./auth.utils";
 import { AppError } from "../../middleware/app-error";
 import redisClient from '../../../redis';
@@ -64,7 +64,7 @@ export const refreshTokenHandler = async (req: Request, res: Response, next: Nex
 export const sendOTPHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { username } = req.body;
-        
+
         const otp = await sendOTP({ username });
 
         res.json({
@@ -73,7 +73,7 @@ export const sendOTPHandler = async (req: Request, res: Response, next: NextFunc
             otp // In production, you would not return the OTP in the response
         });
 
-    }catch (error) {
+    } catch (error) {
         next(error);
     }
 }
@@ -81,7 +81,7 @@ export const sendOTPHandler = async (req: Request, res: Response, next: NextFunc
 export const resetPasswordHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { username, otp, newPassword, repeatNewPassword } = req.body;
-       
+
         if (newPassword !== repeatNewPassword) {
             throw new AppError('Passwords do not match', 400);
         }
@@ -92,6 +92,31 @@ export const resetPasswordHandler = async (req: Request, res: Response, next: Ne
         res.json({
             success: true,
             message: 'Password reset successfully',
+            ...result
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const changePasswordHandler = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const accessToken = req.headers['authorization']?.split(' ')[1];
+
+        if (!accessToken) {
+            throw new AppError('No access token provided', 401);
+        }
+
+        const tokenCredentials = verifyAccessToken(accessToken) as tokenCredentials;
+        const { currentPassword, newPassword, repeatNewPassword } = req.body;
+        if (newPassword !== repeatNewPassword) {
+            throw new AppError('Passwords do not match', 400);
+        }
+        const changeData = { personId: tokenCredentials.personId, currentPassword, newPassword, repeatNewPassword };
+        const result = await changePassword(changeData);
+        res.json({
+            success: true,
+            message: 'Password changed successfully',
             ...result
         });
     } catch (error) {

@@ -26,3 +26,13 @@ export const resetPasswordSchema = zod.object({
     message: "Passwords do not match",
     path: ["repeatNewPassword"],
 });
+
+export const changePasswordSchema = zod.object({
+    currentPassword: zod.string(),
+    newPassword: passwordSchema,
+    repeatNewPassword: passwordSchema,
+}).refine((data) => data.newPassword === data.repeatNewPassword, {
+    message: "Passwords do not match",
+    path: ["repeatNewPassword"],
+});
+

@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import { persons } from "../../db/Person";
 import { verifyPassword, hashPassword, generateOTP, generateAccessToken, generateRefreshToken, formatTokenCredentials, verifyRefreshToken, verifyOTP } from "./auth.utils";
 import { AppError } from "../../middleware/app-error";
-import { loginRequest, otpRequest, resetPasswordRequest } from "./type.auth";
+import { changePasswordRequest, loginRequest, otpRequest, resetPasswordRequest } from "./type.auth";
 import { db } from "../../db/client";
 import { eq } from 'drizzle-orm/sql/expressions/conditions';
 import { redisClient } from "../../../redis";
@@ -194,3 +194,27 @@ export const resetPassword = async (resetData: resetPasswordRequest) => {
         }
     }
 }
+
+export const changePassword = async (data:changePasswordRequest ) => {
+    try {
+        const user = await db.query.persons.findFirst({
+            where: eq(persons.personId, data.personId),
+            columns: { password: true },
+        });
+        if (!user) {
+            throw new AppError('User not found', 404);
+        }
+        const isMatch = await verifyPassword(data.currentPassword, user.password);
+        if (!isMatch) {
+            throw new AppError('Current password is incorrect', 401);
+        }
+        const hashedPassword = await hashPassword(data.newPassword);
+        await db.update(persons).set({ password: hashedPassword }).where(eq(persons.personId, data.personId));
+        return { success: true, message: 'Password changed successfully' };
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new AppError(`Failed to change password: ${error.message}`, 500);
+        }
+    }
+}
+    

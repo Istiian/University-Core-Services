@@ -77,4 +77,9 @@ export type AuthUser = {
     } | null;
 }
 
-
+export type changePasswordRequest = {
+    personId: number;
+    currentPassword: string;
+    newPassword: string;
+    repeatNewPassword: string;
+}

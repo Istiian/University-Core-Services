@@ -16,7 +16,7 @@ import './src/middleware/passport';
 dotenv.config();
 const app = express();
 app.use(express.json());
-
+app.use(passport.initialize());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/student',passport.authenticate('jwt', { session: false }), studentRoutes);
