@@ -1,11 +1,10 @@
-import { Express, Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from "express";
 import { db } from "../db/client";
-import { persons } from "../db/Person";
 import { permissionRoles } from "../db/PermissionRole";
 import { verifyAccessToken } from "../modules/auth/auth.utils";
 import { eq } from "drizzle-orm/sql/expressions/conditions";
-import {AppError} from "../middleware/app-error";
-
+import { AppError } from "../middleware/app-error";
+import logger from "../../logger";
 
 export const hasPermission = (...permission: string[]) => {
     return async (req: Request, res: Response, next: NextFunction) => {
@@ -18,10 +17,9 @@ export const hasPermission = (...permission: string[]) => {
 
             const tokenCredentials = verifyAccessToken(token);
 
-            // Fetch the user's role and permissions from the database
             const userPermissions = await db.query.permissionRoles.findMany({
                 where: eq(permissionRoles.roleId, tokenCredentials.role),
-                with:{
+                with: {
                     permission: {
                         columns: {
                             name: true,
@@ -30,21 +28,31 @@ export const hasPermission = (...permission: string[]) => {
                 }
             });
 
-            console.log('User permissions:', userPermissions.map(up => up.permission.name));
-
+            const permissionNames = userPermissions.map(up => up.permission.name);
             const hasRequiredPermission = userPermissions.some(up => permission.includes(up.permission.name));
-            console.log('Has required permission:', hasRequiredPermission);
+
+            logger.debug('Permission check', {
+                personId: tokenCredentials.personId,
+                required: permission,
+                granted: permissionNames,
+                allowed: hasRequiredPermission,
+            });
+
             if (!hasRequiredPermission) {
+                logger.warn('Permission denied', {
+                    personId: tokenCredentials.personId,
+                    required: permission,
+                });
                 throw new AppError('Forbidden', 403);
             }
-           
+
             next();
         } catch (error) {
-            console.error('Permission error:', error);
             if (error instanceof AppError) {
-                return res.status(error.statusCode).json({ message: error.message });
+                return next(error);
             }
-            throw error;
+            logger.error('Permission middleware error:', error);
+            return next(new AppError('Internal server error', 500));
         }
     }
 }

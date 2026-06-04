@@ -1,5 +1,5 @@
 import { createClient } from 'redis';
-import { AppError } from "./src/middleware/app-error";
+import logger from './logger';
 
 export const redisClient = createClient({
     url: process.env.REDIS_URL || 'redis://localhost:6379',
@@ -8,18 +8,16 @@ export const redisClient = createClient({
 
 redisClient.on('error', (err) => {
     if (err instanceof Error) {
-        console.error(`Redis Client Error: ${err.message}`);
+        logger.error('Redis client error', { message: err.message });
     } else {
-        console.error('Redis Client Error:', err);
+        logger.error('Redis client error', { err });
     }
 });
 
 redisClient.connect().then(() => {
-    console.log('Connected to Redis');
+    logger.info('Connected to Redis');
 }).catch((err) => {
-    console.error('Redis connection error:', err);
+    logger.error('Redis connection error', { err });
 });
 
-
 export default redisClient;
-

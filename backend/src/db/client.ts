@@ -2,11 +2,12 @@ import dotenv from 'dotenv';
 import { Pool } from 'pg';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import * as schema from './schema';
+import logger from '../../logger';
 
 dotenv.config();
 
 if (!process.env.DATABASE_URL) {
-    console.warn('Warning: DATABASE_URL is not set. pg Pool may fail to connect.');
+    logger.warn('DATABASE_URL is not set; pg Pool may fail to connect.');
 }
 
 const pool = new Pool({

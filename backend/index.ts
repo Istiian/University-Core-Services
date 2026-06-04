@@ -12,9 +12,24 @@ import adminRoutes from './src/modules/admin/admin.router';
 import programChairRoutes from './src/modules/program chair/programChair.router';
 import { errorMiddleware } from './src/middleware/errorHandler';
 import './src/middleware/passport';
+import {rateLimit} from 'express-rate-limit';
+import cors from 'cors';
+import logger from './logger';
 
-dotenv.config();
 const app = express();
+dotenv.config();
+
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+    message: 'Too many requests from this IP, please try again after 15 minutes'
+});
+
+const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || []; 
+app.use(cors({
+    origin: allowedOrigins
+}));
+app.use(limiter);
 app.use(express.json());
 app.use(passport.initialize());
 
@@ -25,7 +40,7 @@ app.use('/api/department', passport.authenticate('jwt', { session: false }), dep
 app.use('/api/staff', passport.authenticate('jwt', { session: false }), staffRoutes);
 app.use('/api/faculty', passport.authenticate('jwt', { session: false }), facultyRoutes);
 app.use('/api/dean', passport.authenticate('jwt', { session: false }), deanRoutes);
-app.use('/api/admin', adminRoutes);
+app.use('/api/admin',passport.authenticate('jwt', { session: false }), adminRoutes);
 app.use('/api/program-chair', passport.authenticate('jwt', { session: false }), programChairRoutes);
 
 app.get('/', (req: Request, res: Response) => {
@@ -37,7 +52,7 @@ app.use(errorMiddleware);
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    logger.info(`Server is running on port ${PORT}`);
 });
 
 

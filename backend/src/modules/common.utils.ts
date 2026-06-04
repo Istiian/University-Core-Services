@@ -6,12 +6,13 @@ import {createTransport} from 'nodemailer';
 import { AppError } from '../middleware/app-error';
 import { sendEmailRequest} from './auth/type.auth';
 import PDFDocument from 'pdfkit';
-import { UserData } from './common.type';
+import logger from '../../logger';
+import { handleServiceError } from '../utils/serviceError';
 
 const transporter = createTransport({
     host: process.env.EMAIL_HOST,
     port: Number(process.env.EMAIL_PORT) || 587,
-    secure: false, // true for 465, false for other ports
+    secure: false,
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
@@ -20,7 +21,7 @@ const transporter = createTransport({
 
 export const checkUserExists = async (email: string): Promise<boolean> => {
     const existingUser = await db.select().from(persons).where(eq(persons.email, email));
-    console.log("Existing user check result:", existingUser);
+    logger.debug('Email uniqueness check', { email, exists: existingUser.length > 0 });
     return existingUser.length > 0;
 }
 
@@ -36,14 +37,15 @@ export const hashPassword = async (password: string): Promise<string> => {
 
 export const sendEmail = async (emailData: sendEmailRequest) => {
     try {
-        const info = await transporter.sendMail({
+        await transporter.sendMail({
             from: process.env.EMAIL_FROM,
             to: emailData.to,
             subject: emailData.subject,
             text: emailData.text,
         });
+        logger.info('Email sent', { to: emailData.to, subject: emailData.subject });
     } catch (error) {
-        throw new AppError('Failed to send email', 500);
+        handleServiceError(error, 'sendEmail', 'Failed to send email');
     }
 };
 
@@ -66,57 +68,4 @@ export const veritfyParam = (param: string, paramName: string): number => {
         throw new AppError(`Invalid ${paramName}`, 400);
     }
     return paramValue;
-}
-
-export const FormatUserData = (user: UserData) => {
-    switch (user.role?.name) {
-        case 'student':
-            return {
-                studentId: user.student?.studentId,
-                personId: user.personId,
-                role: user.role.name,
-                scope: user.student?.course?.name
-            };
-        // Add cases for other roles as needed
-        case 'faculty':
-            return {
-                facultyId: user.faculty?.facultyId,
-                personId: user.personId,
-                role: user.role.name,
-                scope: user.faculty?.department?.name
-            };
-        case 'admin':
-            return {
-                adminId: user.admin?.adminId,
-                personId: user.personId,
-                role: user.role.name,
-                scope: user.admin?.office?.name
-            };
-        case 'dean':
-            return {
-                deanId: user.dean?.deanId,
-                personId: user.personId,
-                role: user.role.name,
-                scope: user.dean?.department?.name
-            };
-        case 'programChair':
-            return {
-                programChairId: user.programChair?.programChairId,
-                personId: user.personId,
-                role: user.role.name,
-                scope: user.programChair?.course?.name
-            };
-        case 'staff':
-            return {
-                staffId: user.staff?.staffId,
-                personId: user.personId,
-                role: user.role.name,
-                scope: user.staff?.office?.name
-            };
-        default:
-            return {
-                personId: user.personId,
-                role: user.role
-            };
-    }
 }

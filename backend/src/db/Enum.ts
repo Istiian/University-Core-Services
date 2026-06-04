@@ -26,12 +26,4 @@ export const EmployeeType = pgEnum("EmployeeType", [
     "Contractual"
 ]);
 
-export const personRole = pgEnum("personRole", [
-    "student",
-    "faculty",
-    "admin",
-    "dean",
-    "programChair",
-    "staff"
-]);
 

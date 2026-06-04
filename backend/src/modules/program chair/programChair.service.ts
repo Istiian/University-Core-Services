@@ -6,6 +6,7 @@ import { persons } from '../../db/Person';
 import { AppError } from '../../middleware/app-error';
 import { checkUserExists, hashPassword } from '../common.utils';
 import { ProgramChair, ProgramChairFilter } from './programChair.type';
+import { ROLE_ID } from '../../constants/roles';
 
 export const createProgramChair = async (programChairData: ProgramChair) => {
     try {
@@ -36,7 +37,7 @@ export const createProgramChair = async (programChairData: ProgramChair) => {
                 cityMunicipality: programChairData.personalData.address.cityMunicipality,
                 region: programChairData.personalData.address.region,
                 province: programChairData.personalData.address.province,
-                role: 6,
+                role: ROLE_ID.PROGRAM_CHAIR,
             }).returning({ id: persons.personId, username: persons.username });
 
             await tx.insert(programChairs).values({

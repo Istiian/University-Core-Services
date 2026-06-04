@@ -107,3 +107,12 @@
 {"level":"error","message":"Internal Server Error: Failed to refresh access token: Invalid refresh token","name":"AppError","stack":"AppError: Failed to refresh access token: Invalid refresh token\n    at refreshAccessToken (C:\\Users\\markc\\Self-Projects\\Unified Personnel System\\backend\\src\\modules\\auth\\auth.service.ts:130:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async refreshTokenHandler (C:\\Users\\markc\\Self-Projects\\Unified Personnel System\\backend\\src\\modules\\auth\\auth.controller.ts:51:24)","statusCode":500,"timestamp":"2026-05-30T09:02:02.805Z"}
 {"level":"error","message":"Internal Server Error: Login failed: Invalid credentials","name":"AppError","stack":"AppError: Login failed: Invalid credentials\n    at login (C:\\Users\\markc\\Self-Projects\\Unified Personnel System\\backend\\src\\modules\\auth\\auth.service.ts:97:19)\n    at async loginHandler (C:\\Users\\markc\\Self-Projects\\Unified Personnel System\\backend\\src\\modules\\auth\\auth.controller.ts:12:24)","statusCode":500,"timestamp":"2026-05-30T09:02:42.751Z"}
 {"level":"error","message":"Internal Server Error: Failed to create admin","name":"AppError","stack":"AppError: Failed to create admin\n    at createAdminHandler (C:\\Users\\markc\\Self-Projects\\Unified Personnel System\\backend\\src\\modules\\admin\\admin.controller.ts:20:14)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)","statusCode":500,"timestamp":"2026-06-03T06:15:11.957Z"}
+{"level":"info","message":"Server is running on port 3000","timestamp":"2026-06-04T08:43:14.004Z"}
+{"level":"info","message":"Connected to Redis","timestamp":"2026-06-04T08:43:14.017Z"}
+{"level":"warn","message":"Permission denied","personId":103,"required":["personnel:create:any"],"timestamp":"2026-06-04T08:43:38.369Z"}
+{"level":"warn","message":"Forbidden","statusCode":403,"timestamp":"2026-06-04T08:43:38.371Z"}
+{"level":"info","message":"Server is running on port 3000","timestamp":"2026-06-04T08:44:24.662Z"}
+{"level":"info","message":"Connected to Redis","timestamp":"2026-06-04T08:44:24.673Z"}
+{"level":"info","message":"User logged in","personId":105,"role":3,"timestamp":"2026-06-04T08:45:45.248Z"}
+{"level":"warn","message":"Permission denied","personId":105,"required":["personnel:create:any"],"timestamp":"2026-06-04T08:46:00.294Z"}
+{"level":"warn","message":"Forbidden","statusCode":403,"timestamp":"2026-06-04T08:46:00.296Z"}

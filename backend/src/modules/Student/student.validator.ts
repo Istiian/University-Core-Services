@@ -8,7 +8,6 @@ const studentDataSchema = z.object({
     enrollmentDate: dateStringSchema,
     courseId: z.number().int().positive("Course ID must be a positive integer"),
     status: z.enum(studentStatusValues).optional(),
-    section: z.string().min(1, "Section is required"),
     studentType: z.enum(studentTypeValues),
 });
 

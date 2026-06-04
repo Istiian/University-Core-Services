@@ -1,10 +1,12 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import fs from 'fs';
-import { persons } from "../../db/Person"
 import { AuthUser, tokenCredentials } from "./type.auth";
 import { AppError } from "../../middleware/app-error";
 import { redisClient } from '../../../redis';
+import crypto from 'crypto';
+import { ROLE_ID } from '../../constants/roles';
+import { handleServiceError } from '../../utils/serviceError';
 
 export const verifyPassword = async (password: string, hash: string): Promise<boolean> => {
     return await bcrypt.compare(password, hash);
@@ -16,7 +18,7 @@ export const hashPassword = async (password: string): Promise<string> => {
 }
 
 export const generateOTP = (): string => {
-    return Math.floor(100000 + Math.random() * 900000).toString(); // Generates a 6-digit OTP
+    return crypto.randomInt(100000, 999999).toString();
 }
 
 export const verifyAccessToken = (token: string): tokenCredentials => {
@@ -24,7 +26,7 @@ export const verifyAccessToken = (token: string): tokenCredentials => {
         const publicKey = fs.readFileSync(process.env.PUBLIC_KEY_PATH as string, 'utf8');
         const decoded = jwt.verify(token, publicKey) as { tokenCredentials: tokenCredentials };
         return decoded.tokenCredentials;
-    } catch (error) {
+    } catch {
         throw new AppError('Invalid access token', 401);
     }
 }
@@ -34,7 +36,7 @@ export const verifyRefreshToken = (token: string): tokenCredentials => {
         const publicKey = fs.readFileSync(process.env.PUBLIC_KEY_PATH as string, 'utf8');
         const decoded = jwt.verify(token, publicKey) as { tokenCredentials: tokenCredentials };
         return decoded.tokenCredentials;
-    } catch (error) {
+    } catch {
         throw new AppError('Invalid refresh token', 401);
     }
 }
@@ -60,52 +62,51 @@ export const verifyOTP = async (personId: number, otp: string): Promise<boolean>
         if (storedOTP !== otp) {
             throw new AppError('Invalid OTP', 401);
         }
-        await redisClient.del(`otp:${personId}`); // Delete OTP after successful verification
+        await redisClient.del(`otp:${personId}`);
         return true;
     } catch (error) {
-        throw new AppError('Failed to verify OTP', 500);
+        handleServiceError(error, 'verifyOTP', 'Failed to verify OTP');
     }
 }
 
 export const formatTokenCredentials = (userData: AuthUser): tokenCredentials => {
     switch (userData.role) {
-        case 2:
+        case ROLE_ID.STUDENT:
             return {
                 studentId: userData.student?.studentId,
                 personId: userData.personId,
                 role: userData.role,
                 course: userData.student?.course?.name
             };
-        // Add cases for other roles as needed
-        case 3:
+        case ROLE_ID.FACULTY:
             return {
                 facultyId: userData.faculty?.facultyId,
                 personId: userData.personId,
                 role: userData.role,
                 department: userData.faculty?.department?.name
             };
-        case 1:
+        case ROLE_ID.ADMIN:
             return {
                 adminId: userData.admin?.adminId,
                 personId: userData.personId,
                 role: userData.role,
                 office: userData.admin?.office?.name
             };
-        case 5:
+        case ROLE_ID.DEAN:
             return {
                 deanId: userData.dean?.deanId,
                 personId: userData.personId,
                 role: userData.role,
                 department: userData.dean?.department?.name
             };
-        case 6:
+        case ROLE_ID.PROGRAM_CHAIR:
             return {
                 programChairId: userData.programChair?.programChairId,
                 personId: userData.personId,
                 role: userData.role,
                 course: userData.programChair?.course?.name
             };
-        case 4:
+        case ROLE_ID.STAFF:
             return {
                 staffId: userData.staff?.staffId,
                 personId: userData.personId,

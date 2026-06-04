@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { login, refreshAccessToken, deleteRefreshTokens, sendOTP, resetPassword, changePassword } from "./auth.service";
-import { generateAccessToken, verifyAccessToken, verifyRefreshToken } from "./auth.utils";
+import { verifyAccessToken } from "./auth.utils";
 import { AppError } from "../../middleware/app-error";
-import redisClient from '../../../redis';
 import { tokenCredentials } from "./type.auth";
 
 
@@ -23,9 +22,7 @@ export const loginHandler = async (req: Request, res: Response, next: NextFuncti
 export const logoutHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const accessToken = req.headers['authorization']?.split(' ')[1];
-        // const accessToken = typeof authHeader === 'string' ? authHeader.split(' ')[1] : undefined; // Extract token from Bearer token
 
-        console.log('Access Token for logout:', accessToken);
         if (!accessToken) {
             throw new AppError('No access token provided', 401);
         }
@@ -65,12 +62,11 @@ export const sendOTPHandler = async (req: Request, res: Response, next: NextFunc
     try {
         const { username } = req.body;
 
-        const otp = await sendOTP({ username });
+        await sendOTP({ username });
 
         res.json({
             success: true,
             message: 'OTP sent successfully',
-            otp // In production, you would not return the OTP in the response
         });
 
     } catch (error) {

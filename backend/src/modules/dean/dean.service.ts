@@ -5,6 +5,7 @@ import { persons } from '../../db/Person';
 import { AppError } from '../../middleware/app-error';
 import { checkUserExists, hashPassword } from '../common.utils';
 import { Dean, DeanFilter } from './dean.type';
+import { ROLE_ID } from '../../constants/roles';
 
 export const createDean = async (deanData: Dean) => {
     try {
@@ -35,7 +36,7 @@ export const createDean = async (deanData: Dean) => {
                 cityMunicipality: deanData.personalData.address.cityMunicipality,
                 region: deanData.personalData.address.region,
                 province: deanData.personalData.address.province,
-                role: 5,
+                role: ROLE_ID.DEAN,
             }).returning({ id: persons.personId, username: persons.username });
 
             await tx.insert(deans).values({

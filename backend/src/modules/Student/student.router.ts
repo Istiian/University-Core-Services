@@ -7,7 +7,7 @@ import { hasPermission } from '../../middleware/hasPermission';
 const router = Router();
 
 
-router.get('/',hasPermission("personnel:read:any"),listStudentsHandler);
+router.get('/',listStudentsHandler);
 router.post('/',hasPermission("personnel:create:any"), validateRequest(registerStudentSchema), registerStudentHandler);
 router.put('/:studentId', hasPermission("personnel:update:any"), validateRequest(updateStudentSchema), updateStudentInfoHandler);
 router.get('/:studentId', hasPermission("personnel:read:any", "personnel:read:self"), getStudentByIdHandler);

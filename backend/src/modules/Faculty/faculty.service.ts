@@ -6,6 +6,7 @@ import { departments } from '../../db/Department';
 import { AppError } from '../../middleware/app-error';
 import { checkUserExists, hashPassword } from '../common.utils';
 import { Faculty, FacultyFilter } from './faculty.type';
+import { ROLE_ID } from '../../constants/roles';
 
 export const createFaculty = async (facultyData: Faculty) => {
     try {
@@ -36,7 +37,7 @@ export const createFaculty = async (facultyData: Faculty) => {
                 cityMunicipality: facultyData.personalData.address.cityMunicipality,
                 region: facultyData.personalData.address.region,
                 province: facultyData.personalData.address.province,
-                role: 3
+                role: ROLE_ID.FACULTY
             }).returning({ id: persons.personId, username: persons.username });
 
             await tx.insert(faculty).values({

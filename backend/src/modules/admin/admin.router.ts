@@ -5,7 +5,7 @@ import { RegisterAdminSchema, UpdateAdminSchema } from './admin.validator';
 import { hasPermission } from '../../middleware/hasPermission';
 const adminRouter = Router();
 
-adminRouter.post('/', hasPermission("personnel:create:any"), validateRequest(RegisterAdminSchema), createAdminHandler);
+adminRouter.post('/', validateRequest(RegisterAdminSchema), createAdminHandler);
 adminRouter.get('/', hasPermission("personnel:read:any"), listAdminsHandler);
 adminRouter.get('/:adminId', hasPermission("personnel:read:any", "personnel:read:self"), getAdminByIdHandler);
 adminRouter.put('/:adminId', hasPermission("personnel:update:any"), validateRequest(UpdateAdminSchema), updateAdminHandler);

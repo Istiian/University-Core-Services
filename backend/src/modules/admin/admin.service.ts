@@ -6,6 +6,7 @@ import { persons } from '../../db/Person';
 import { AppError } from '../../middleware/app-error';
 import { checkUserExists, hashPassword } from '../common.utils';
 import { Admin, AdminFilter } from './admin.type';
+import { ROLE_ID } from '../../constants/roles';
 
 export const createAdmin = async (adminData: Admin) => {
     try {
@@ -36,7 +37,7 @@ export const createAdmin = async (adminData: Admin) => {
                 cityMunicipality: adminData.personalData.address.cityMunicipality,
                 region: adminData.personalData.address.region,
                 province: adminData.personalData.address.province,
-                role: 1,
+                role: ROLE_ID.ADMIN,
             }).returning({ id: persons.personId, username: persons.username });
 
             await tx.insert(admins).values({

@@ -7,6 +7,7 @@ import { persons } from '../../db/Person';
 import { hashPassword } from '../common.utils';
 import { checkUserExists } from '../common.utils';
 import { AppError } from '../../middleware/app-error';
+import { ROLE_ID } from '../../constants/roles';
 
 export const createStaff = async (staffData: Staff) => {
     try {
@@ -40,7 +41,7 @@ export const createStaff = async (staffData: Staff) => {
                 cityMunicipality: staffData.personalData.address.cityMunicipality,
                 region: staffData.personalData.address.region,
                 province: staffData.personalData.address.province,
-                role: 4
+                role: ROLE_ID.STAFF
             }).returning({ id: persons.personId, username: persons.username });
 
             const newStaff = await tx.insert(staff).values({
@@ -145,8 +146,6 @@ export const updateStaff = async (staffId: number, staffData: Partial<Staff>) =>
                     ne(persons.personId, existingStaff.personId)
                 )
             });
-            console.log("checkEmailExists", checkEmailExists);
-
             if (checkEmailExists) {
                 throw new AppError("User with this email already exists", 400);
             }

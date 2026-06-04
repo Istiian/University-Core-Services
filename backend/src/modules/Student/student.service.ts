@@ -2,9 +2,11 @@ import { students } from "../../db/Student"
 import { db } from "../../db/client";
 import { persons } from "../../db/schema";
 import { AppError } from "../../middleware/app-error";
-import { checkRepeatPassword, checkUserExists, hashPassword } from "../common.utils";
+import { checkUserExists, hashPassword } from "../common.utils";
 import { Student, StudentFilter } from "./student.type";
 import { and, eq, ilike, ne, or } from "drizzle-orm";
+import { ROLE_ID } from "../../constants/roles";
+import { handleServiceError } from "../../utils/serviceError";
 
 export const getAllStudents = async (page: number, limit: number, filter: StudentFilter = {}) => {
     const offset = (page - 1) * limit;
@@ -41,8 +43,7 @@ export const getAllStudents = async (page: number, limit: number, filter: Studen
 
        
     } catch (error) {
-        console.error('Error fetching students:', error);
-        throw error instanceof AppError ? error : new AppError('Failed to fetch students', 500);
+        handleServiceError(error, 'getAllStudents', 'Failed to fetch students');
     }
 };
 
@@ -57,8 +58,7 @@ export const getStudentById = async (studentId: number) => {
         });
         return student;
     } catch (error) {
-        console.error('Error fetching student:', error);
-        throw error instanceof AppError ? error : new AppError('Failed to fetch student', 500);
+        handleServiceError(error, 'getStudentById', 'Failed to fetch student');
     }
 };
 
@@ -86,7 +86,7 @@ export const registerStudent = async (studentData: Student) => {
                 cityMunicipality: studentData.personalData.address.cityMunicipality,
                 region: studentData.personalData.address.region,
                 province: studentData.personalData.address.province,
-                role: 1
+                role: ROLE_ID.STUDENT
             }).returning({ id: persons.personId, username: persons.username });
 
             const student = await trx.insert(students).values({
@@ -102,8 +102,7 @@ export const registerStudent = async (studentData: Student) => {
 
         return { ...data, password: generatedPassword };
     } catch (error) {
-        console.error('Error registering student:', error);
-        throw error instanceof AppError ? error : new AppError('Failed to register student', 500);
+        handleServiceError(error, 'registerStudent', 'Failed to register student');
     }
 }
 
@@ -126,13 +125,11 @@ export const updateStudentInfo = async (studentId: number, studentData: Partial<
                     ne(persons.personId, existingStudent.personId)
                 )
             });
-            console.log("checkEmailExists", checkEmailExists);
-
             if (checkEmailExists) {
                 throw new AppError("User with this email already exists", 400);
             }
 
-            const updatedPersonalInfo = await trx.update(persons)
+            await trx.update(persons)
                 .set({
                     firstName: studentData.personalData?.firstName,
                     lastName: studentData.personalData?.lastName,
@@ -150,7 +147,7 @@ export const updateStudentInfo = async (studentId: number, studentData: Partial<
                 .where(eq(persons.personId, existingStudent.personId))
                 
             
-            const updatedStudentInfo = await trx.update(students)
+            await trx.update(students)
                 .set({
                     enrollmentDate: studentData.studentData?.enrollmentDate,
                     courseId: studentData.studentData?.courseId,
@@ -161,8 +158,7 @@ export const updateStudentInfo = async (studentId: number, studentData: Partial<
         });
 
     } catch (error) {
-        console.error('Error updating student info:', error);
-        throw error instanceof AppError ? error : new AppError('Failed to update student', 500);
+        handleServiceError(error, 'updateStudentInfo', 'Failed to update student');
     }
 }
 
@@ -191,7 +187,6 @@ export const deleteStudentInfo = async (studentId: number, trx?: any) => {
 
         return deletedData;
     } catch (error) {
-        console.error('Error deleting student:', error);
-        throw error instanceof AppError ? error : new AppError('Failed to delete student', 500);
+        handleServiceError(error, 'deleteStudentInfo', 'Failed to delete student');
     }
 }
