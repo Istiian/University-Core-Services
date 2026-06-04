@@ -11,7 +11,7 @@
   },
   "author": "Istian Forlaje",
   "license": "ISC",
-  "description": "",
+  "description": "REST API for managing university personnel, departments, and courses with JWT auth and RBAC",
   "dependencies": {
     "@aivangogh/ph-address": "^2025.4.4",
     "@types/cors": "^2.8.19",

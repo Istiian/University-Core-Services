@@ -1,0 +1,2054 @@
+{
+  "info": {
+    "_postman_id": "196b92c4-da82-43bf-a3fc-66b5a99ba2fa",
+    "name": "UPS",
+    "description": "UPS (University Portal System) API collection. Contains all endpoints for managing university entities including authentication, students, faculty, staff, admins, deans, program chairs, departments, and courses.\n\n## Folders\n\n- **Auth** — Authentication endpoints for login, logout, token refresh, OTP, and password management.\n- **Student** — Endpoints for managing student records including registration, profile updates, and listing.\n- **Course** — Endpoints for managing courses including creation, updates, and listing.\n- **Department** — Endpoints for managing university departments.\n- **Staff** — Endpoints for managing staff members including registration, profile updates, and listing.\n- **Faculty** — Endpoints for managing faculty members including registration, profile updates, and listing.\n- **Dean** — Endpoints for managing deans including registration, profile updates, and listing.\n- **Admin** — Endpoints for managing admin accounts including registration, profile updates, and listing.\n- **Program Chair** — Endpoints for managing program chairs including registration, profile updates, and listing.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "51189345",
+    "_collection_link": "https://go.postman.co/collection/51189345-196b92c4-da82-43bf-a3fc-66b5a99ba2fa?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"username\": \"202600110\",\r\n  \"password\": \"B0Zbgd+DKwzoAXw2Ok42\"\r\n}\r\n"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Authenticate a user and receive access and refresh tokens."
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbkNyZWRlbnRpYWxzIjp7InBlcnNvbklkIjo1Miwicm9sZSI6InN0dWRlbnQiLCJjb3Vyc2UiOiJCU0lUIn0sImlhdCI6MTc4MDExMjU1MSwiZXhwIjoxNzgwMTEzNDUxfQ.XZMcivk-NPn-OJOoJS0otMzPLQhQm-WbYbBNzPXkRQu0lvRZBbUQva8Dhtvhvo5JDkhGGtrIKFugS5iSwBRqGZQUxTV9HNqWTK9r_Qi_A0CFmFUqlWLTiuU3vq55q2kfZ1fZDCgcIIEXUurPQlY9DSUIGsS0dj2JZHtmvu28Wqx1ZrvaJYKb6QlCvTwMRSx-TkXvsP5ieM66Gij1jo1Y7On82Z2ywudaQul6P1CROoneN5oOCJRq2i0SjqKk-F3mPQNdwS7_RRI8ywxr9DRPhubtQ5aqxGxO4cSQQjPHMehUPb1WjNGz21c2CTfFSQrIret0-tLWzf_CEyxRe9xHvg",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"lkda@gmail.com\",\r\n  \"password\": \"Istian123\"\r\n}\r\n"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/logout",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "auth",
+                "logout"
+              ]
+            },
+            "description": "Invalidate the current user session and revoke tokens."
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{refreshToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/refresh-token",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "auth",
+                "refresh-token"
+              ]
+            },
+            "description": "Generate a new access token using a valid refresh token."
+          },
+          "response": []
+        },
+        {
+          "name": "Send OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"username\": \"202600090\"\r\n}\r\n"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/send-otp",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "auth",
+                "send-otp"
+              ]
+            },
+            "description": "Send a one-time password to the user's registered contact for verification."
+          },
+          "response": []
+        },
+        {
+          "name": "Password Reset",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"username\": \"202600090\",\r\n  \"otp\":\"349949\",\r\n  \"newPassword\": \"Istian1234\",\r\n  \"repeatNewPassword\": \"Istian1234\"\r\n}\r\n"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/reset-password",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "auth",
+                "reset-password"
+              ]
+            },
+            "description": "Reset the user's password using a valid OTP or reset token."
+          },
+          "response": []
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"currentPassword\":\"aw2026\",\r\n    \"newPassword\": \"aw2026aeE@\",\r\n    \"repeatNewPassword\": \"aw2026aeE@\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/change-password",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "auth",
+                "change-password"
+              ]
+            },
+            "description": "Change the authenticated user's password."
+          },
+          "response": []
+        }
+      ],
+      "description": "Authentication endpoints for login, logout, token refresh, OTP, and password management."
+    },
+    {
+      "name": "Student",
+      "item": [
+        {
+          "name": "List all students",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/student?page=1&limit=&status=&studentType=&studentStatus=&courseId=1&search=2026",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "student"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                },
+                {
+                  "key": "studentType",
+                  "value": ""
+                },
+                {
+                  "key": "studentStatus",
+                  "value": ""
+                },
+                {
+                  "key": "courseId",
+                  "value": "1"
+                },
+                {
+                  "key": "search",
+                  "value": "2026"
+                }
+              ]
+            },
+            "description": "Retrieve a paginated list of students with optional filters for status, type, course, and search."
+          },
+          "response": []
+        },
+        {
+          "name": "Register Student",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"personalData\": {\r\n        \"firstName\": \"Folrjae\",\r\n        \"lastName\": \"aw\",\r\n        \"middleName\": \"\",\r\n        \"birthDate\": \"2004-08-09\",\r\n        \"contactNumber\": \"09451360745\",\r\n        \"email\": \"awe3oeswefh@gmail.com\",\r\n        \"address\": {\r\n            \"houseNumber\": \"33\",\r\n            \"street\": \"D\",\r\n            \"barangay\": \"string\",\r\n            \"cityMunicipality\": \"string\",\r\n            \"region\": \"string\",\r\n            \"province\": \"string\"\r\n        }\r\n    },\r\n    \"studentData\":{\r\n        \"enrollmentDate\": \"2004-08-09\",\r\n        \"courseId\": 1,\r\n        \"section\": \"stringg\",\r\n        \"studentType\": \"regular\",\r\n        \"status\": \"graduated\"\r\n    }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/student/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "student",
+                ""
+              ]
+            },
+            "description": "Register a new student in the system."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Student",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"personalData\": {\r\n        \"firstName\": \"awww\",\r\n        \"lastName\": \"awz\",\r\n        \"middleName\": \"\",\r\n        \"birthDate\": \"2004-08-09\",\r\n        \"contactNumber\": \"09451360745\",\r\n        \"email\": \"aweeeo@gmail.com\",\r\n        \"address\": {\r\n            \"houseNumber\": \"33\",\r\n            \"street\": \"DDDDD\",\r\n            \"barangay\": \"string\",\r\n            \"cityMunicipality\": \"string\",\r\n            \"region\": \"string\",\r\n            \"province\": \"string\"\r\n        },\r\n        \"role\": \"student\"\r\n    },\r\n    \"studentData\":{\r\n        \"enrollmentDate\": \"2004-08-09\",\r\n        \"courseId\": 1,\r\n        \"section\": \"string\",\r\n        \"studentType\": \"regular\",\r\n        \"status\": \"graduated\"\r\n    }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/student/:studentId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "student",
+                ":studentId"
+              ],
+              "variable": [
+                {
+                  "key": "studentId",
+                  "value": "28"
+                }
+              ]
+            },
+            "description": "Update an existing student's profile information."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Student",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/student/:studentId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "student",
+                ":studentId"
+              ],
+              "variable": [
+                {
+                  "key": "studentId",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "Permanently remove a student record from the system."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Student Data",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/student/:studentId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "student",
+                ":studentId"
+              ],
+              "variable": [
+                {
+                  "key": "studentId",
+                  "value": "28"
+                }
+              ]
+            },
+            "description": "Retrieve a specific student's profile data by their ID."
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for managing student records including registration, profile updates, and listing."
+    },
+    {
+      "name": "course",
+      "item": [
+        {
+          "name": "Create Course",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"string\",\r\n    \"departmentId\": \r\n}\r\n"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/course",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "course"
+              ]
+            },
+            "description": "Create a new course in the system."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Course",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"strinhg\"\r\n    \r\n}\r\n"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/course/:courseId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "course",
+                ":courseId"
+              ],
+              "variable": [
+                {
+                  "key": "courseId",
+                  "value": "2"
+                }
+              ]
+            },
+            "description": "Update an existing course's details."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Course",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/course/:courseId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "course",
+                ":courseId"
+              ],
+              "variable": [
+                {
+                  "key": "courseId",
+                  "value": "2"
+                }
+              ]
+            },
+            "description": "Permanently remove a course from the system."
+          },
+          "response": []
+        },
+        {
+          "name": "List Course",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/course?courseId=&name=&departmentId=",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "course"
+              ],
+              "query": [
+                {
+                  "key": "courseId",
+                  "value": ""
+                },
+                {
+                  "key": "name",
+                  "value": ""
+                },
+                {
+                  "key": "departmentId",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Retrieve a list of courses with optional filters by course ID, name, or department."
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for managing courses including creation, updates, and listing."
+    },
+    {
+      "name": "Department",
+      "item": [
+        {
+          "name": "List department",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/department?departmentId=&name=",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "department"
+              ],
+              "query": [
+                {
+                  "key": "departmentId",
+                  "value": ""
+                },
+                {
+                  "key": "name",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Retrieve a list of departments with optional filters."
+          },
+          "response": []
+        },
+        {
+          "name": "Create department",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"College of Teacher Education\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/department",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "department"
+              ]
+            },
+            "description": "Create a new department in the system."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Department",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"College of Teacher Educations\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/department/:departmentId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "department",
+                ":departmentId"
+              ],
+              "variable": [
+                {
+                  "key": "departmentId",
+                  "value": "2"
+                }
+              ]
+            },
+            "description": "Update an existing department's information."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete department",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/department/:departmentId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "department",
+                ":departmentId"
+              ],
+              "variable": [
+                {
+                  "key": "departmentId",
+                  "value": "2"
+                }
+              ]
+            },
+            "description": "Permanently remove a department from the system."
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for managing university departments."
+    },
+    {
+      "name": "Staff",
+      "item": [
+        {
+          "name": "Register staff",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"personalData\": {\r\n        \"firstName\": \"aw\",\r\n        \"lastName\": \"aw\",\r\n        \"middleName\": \"\",\r\n        \"birthDate\": \"2004-08-09\",\r\n        \"contactNumber\": \"09451360745\",\r\n        \"email\": \"eseser@gmail.com\",\r\n        \"address\": {\r\n            \"houseNumber\": \"33\",\r\n            \"street\": \"D\",\r\n            \"barangay\": \"string\",\r\n            \"cityMunicipality\": \"string\",\r\n            \"region\": \"string\",\r\n            \"province\": \"string\"\r\n        }\r\n    },\r\n    \"staffData\": {\r\n        \"officeId\": 1,\r\n        \"startDate\": \"2023-08-09\",\r\n        \"type\": \"Full-time\"\r\n    }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/staff",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "staff"
+              ]
+            },
+            "description": "Register a new staff member in the system."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Staff",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"personalData\": {\r\n        \"firstName\": \"aw\",\r\n        \"lastName\": \"Forlaje\",\r\n        \"middleName\": \"\",\r\n        \"birthDate\": \"2004-08-09\",\r\n        \"contactNumber\": \"09451360745\",\r\n        \"email\": \"markchristiaanforlaje@gmail.com\",\r\n        \"address\": {\r\n            \"houseNumber\": \"33\",\r\n            \"street\": \"D\",\r\n            \"barangay\": \"string\",\r\n            \"cityMunicipality\": \"string\",\r\n            \"region\": \"string\",\r\n            \"province\": \"string\"\r\n        }\r\n    },\r\n    \"staffData\": {\r\n        \"officeId\": 1,\r\n        \"startDate\": \"2023-08-10\",\r\n        \"type\": \"Full-time\",\r\n        \"status\": \"resigned\"\r\n    }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/staff/:staffId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "staff",
+                ":staffId"
+              ],
+              "variable": [
+                {
+                  "key": "staffId",
+                  "value": "17"
+                }
+              ]
+            },
+            "description": "Update an existing staff member's profile information."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Staff",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/staff/:staffId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "staff",
+                ":staffId"
+              ],
+              "variable": [
+                {
+                  "key": "staffId",
+                  "value": "17"
+                }
+              ]
+            },
+            "description": "Permanently remove a staff member from the system."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Staff Data",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/staff/:staffId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "staff",
+                ":staffId"
+              ],
+              "variable": [
+                {
+                  "key": "staffId",
+                  "value": "18"
+                }
+              ]
+            },
+            "description": "Retrieve a specific staff member's profile data by their ID."
+          },
+          "response": []
+        },
+        {
+          "name": "List Staff",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/staff?officeId=&status&startDate&type&page&limit&search=",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "staff"
+              ],
+              "query": [
+                {
+                  "key": "officeId",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": null
+                },
+                {
+                  "key": "startDate",
+                  "value": null
+                },
+                {
+                  "key": "type",
+                  "value": null
+                },
+                {
+                  "key": "page",
+                  "value": null
+                },
+                {
+                  "key": "limit",
+                  "value": null
+                },
+                {
+                  "key": "search",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Retrieve a paginated list of staff members with optional filters."
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for managing staff members including registration, profile updates, and listing."
+    },
+    {
+      "name": "Faculty",
+      "item": [
+        {
+          "name": "Register Faculty",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"personalData\": {\r\n        \"firstName\": \"aw\",\r\n        \"lastName\": \"aw\",\r\n        \"middleName\": \"\",\r\n        \"birthDate\": \"2004-08-09\",\r\n        \"contactNumber\": \"09451360745\",\r\n        \"email\": \"markchritinfolaje@gmail.com\",\r\n        \"address\": {\r\n            \"houseNumber\": \"33\",\r\n            \"street\": \"D\",\r\n            \"barangay\": \"string\",\r\n            \"cityMunicipality\": \"string\",\r\n            \"region\": \"string\",\r\n            \"province\": \"string\"\r\n        }\r\n    },\r\n    \"facultyData\":{\r\n         \"departmentId\": 1,\r\n         \"startDate\": \"2023-08-09\",\r\n         \"type\": \"Full-time\"\r\n    }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/faculty",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "faculty"
+              ]
+            },
+            "description": "Register a new faculty member in the system."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Faculty",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"personalData\": {\r\n        \"firstName\": \"awsr\",\r\n        \"lastName\": \"aw\",\r\n        \"middleName\": \"\",\r\n        \"birthDate\": \"2004-08-09\",\r\n        \"contactNumber\": \"09451360745\",\r\n        \"email\": \"markchritinfolaaje@gmail.com\",\r\n        \"address\": {\r\n            \"houseNumber\": \"33\",\r\n            \"street\": \"D\",\r\n            \"barangay\": \"string\",\r\n            \"cityMunicipality\": \"string\",\r\n            \"region\": \"string\",\r\n            \"province\": \"string\"\r\n        }\r\n    },\r\n    \"facultyData\":{\r\n         \"departmentId\": 1,\r\n         \"startDate\": \"2023-08-09\",\r\n         \"type\": \"Full-time\",\r\n         \"status\": \"resigned\"\r\n       \r\n    }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/faculty/:facultyId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "faculty",
+                ":facultyId"
+              ],
+              "variable": [
+                {
+                  "key": "facultyId",
+                  "value": "2"
+                }
+              ]
+            },
+            "description": "Update an existing faculty member's profile information."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Faculty",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/faculty/:facultyId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "faculty",
+                ":facultyId"
+              ],
+              "variable": [
+                {
+                  "key": "facultyId",
+                  "value": "2"
+                }
+              ]
+            },
+            "description": "Permanently remove a faculty member from the system."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Faculty Data",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/faculty/:facultyId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "faculty",
+                ":facultyId"
+              ],
+              "variable": [
+                {
+                  "key": "facultyId",
+                  "value": "4"
+                }
+              ]
+            },
+            "description": "Retrieve a specific faculty member's profile data by their ID."
+          },
+          "response": []
+        },
+        {
+          "name": "List Faculty",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/faculty?departmentId=&status&startDate=&type=&page&limit&search=",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "faculty"
+              ],
+              "query": [
+                {
+                  "key": "departmentId",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": null
+                },
+                {
+                  "key": "startDate",
+                  "value": ""
+                },
+                {
+                  "key": "type",
+                  "value": ""
+                },
+                {
+                  "key": "page",
+                  "value": null
+                },
+                {
+                  "key": "limit",
+                  "value": null
+                },
+                {
+                  "key": "search",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Retrieve a paginated list of faculty members with optional filters."
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for managing faculty members including registration, profile updates, and listing."
+    },
+    {
+      "name": "Dean",
+      "item": [
+        {
+          "name": "List Deans",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/dean?departmentId&startDate&status=active&type",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "dean"
+              ],
+              "query": [
+                {
+                  "key": "departmentId",
+                  "value": null
+                },
+                {
+                  "key": "startDate",
+                  "value": null
+                },
+                {
+                  "key": "status",
+                  "value": "active"
+                },
+                {
+                  "key": "type",
+                  "value": null
+                }
+              ]
+            },
+            "description": "Retrieve a list of deans with optional filters for department, status, and date."
+          },
+          "response": []
+        },
+        {
+          "name": "Register dean",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"personalData\": {\r\n        \"firstName\": \"aw\",\r\n        \"lastName\": \"aw\",\r\n        \"middleName\": \"\",\r\n        \"birthDate\": \"2004-08-09\",\r\n        \"contactNumber\": \"09451360745\",\r\n        \"email\": \"markchritinfolaalje@gmail.com\",\r\n        \"address\": {\r\n            \"houseNumber\": \"33\",\r\n            \"street\": \"D\",\r\n            \"barangay\": \"string\",\r\n            \"cityMunicipality\": \"string\",\r\n            \"region\": \"string\",\r\n            \"province\": \"string\"\r\n        }\r\n    },\r\n    \"deanData\":{\r\n         \"departmentId\": 1,\r\n         \"startDate\": \"2023-08-09\",\r\n         \"type\": \"Full-time\"\r\n    }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/dean",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "dean"
+              ]
+            },
+            "description": "Register a new dean in the system."
+          },
+          "response": []
+        },
+        {
+          "name": "Update dean info",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"personalData\": {\r\n        \"firstName\": \"aw\",\r\n        \"lastName\": \"aw\",\r\n        \"middleName\": \"\",\r\n        \"birthDate\": \"2004-08-09\",\r\n        \"contactNumber\": \"09451360745\",\r\n        \"email\": \"markchritinfolaalje@gmail.com\",\r\n        \"address\": {\r\n            \"houseNumber\": \"33\",\r\n            \"street\": \"D\",\r\n            \"barangay\": \"string\",\r\n            \"cityMunicipality\": \"string\",\r\n            \"region\": \"string\",\r\n            \"province\": \"string\"\r\n        }\r\n    },\r\n    \"deanData\":{\r\n         \"departmentId\": 1,\r\n         \"startDate\": \"2023-08-09\",\r\n         \"type\": \"Full-time\",\r\n         \"status\": \"resigned\"\r\n    }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/dean/:deanId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "dean",
+                ":deanId"
+              ],
+              "variable": [
+                {
+                  "key": "deanId",
+                  "value": "2"
+                }
+              ]
+            },
+            "description": "Update an existing dean's profile information."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete dean",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/dean/:deanId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "dean",
+                ":deanId"
+              ],
+              "variable": [
+                {
+                  "key": "deanId",
+                  "value": "2"
+                }
+              ]
+            },
+            "description": "Permanently remove a dean from the system."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Dean Data",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/dean/:deanId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "dean",
+                ":deanId"
+              ],
+              "variable": [
+                {
+                  "key": "deanId",
+                  "value": "3"
+                }
+              ]
+            },
+            "description": "Retrieve a specific dean's profile data by their ID."
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for managing deans including registration, profile updates, and listing."
+    },
+    {
+      "name": "admin",
+      "item": [
+        {
+          "name": "Register admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"personalData\": {\r\n        \"firstName\": \"aw\",\r\n        \"lastName\": \"aw\",\r\n        \"middleName\": \"\",\r\n        \"birthDate\": \"2004-08-09\",\r\n        \"contactNumber\": \"09451360745\",\r\n        \"email\": \"kohkikk380@gmail.com\",\r\n        \"address\": {\r\n            \"houseNumber\": \"33\",\r\n            \"street\": \"D\",\r\n            \"barangay\": \"string\",\r\n            \"cityMunicipality\": \"string\",\r\n            \"region\": \"string\",\r\n            \"province\":\"string\"\r\n        }\r\n    },\r\n    \"adminData\":{\r\n         \"officeId\": 1,\r\n         \"startDate\": \"2023-08-09\",\r\n         \"type\": \"Full-time\"\r\n    }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/admin",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "admin"
+              ]
+            },
+            "description": "Register a new admin account in the system."
+          },
+          "response": []
+        },
+        {
+          "name": "Update admin info",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"personalData\": {\r\n        \"firstName\": \"aw\",\r\n        \"lastName\": \"aw\",\r\n        \"middleName\": \"\",\r\n        \"birthDate\": \"2004-08-09\",\r\n        \"contactNumber\": \"09451360745\",\r\n        \"email\": \"11w@gmail.com\",\r\n        \"password\": \"Istian123\",\r\n        \"repeatPassword\": \"Istian123\",\r\n        \"address\": {\r\n            \"houseNumber\": \"33\",\r\n            \"street\": \"D\",\r\n            \"barangay\": \"string\",\r\n            \"cityMunicipality\": \"string\",\r\n            \"region\": \"string\",\r\n            \"province\":\"string\"\r\n        },\r\n        \"role\": \"admin\"\r\n    },\r\n    \"adminData\":{\r\n         \"officeId\": 1,\r\n         \"startDate\": \"2023-08-09\",\r\n         \"type\": \"Full-time\"\r\n    }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/admin/:adminId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "admin",
+                ":adminId"
+              ],
+              "variable": [
+                {
+                  "key": "adminId",
+                  "value": "3"
+                }
+              ]
+            },
+            "description": "Update an existing admin's profile information."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Admin",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/admin/:adminId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "admin",
+                ":adminId"
+              ],
+              "variable": [
+                {
+                  "key": "adminId",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Permanently remove an admin account from the system."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Admin Data",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/admin/:adminId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "admin",
+                ":adminId"
+              ],
+              "variable": [
+                {
+                  "key": "adminId",
+                  "value": "5"
+                }
+              ]
+            },
+            "description": "Retrieve a specific admin's profile data by their ID."
+          },
+          "response": []
+        },
+        {
+          "name": "List Admins",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/admin?officeId&startDate&status&type&search",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "admin"
+              ],
+              "query": [
+                {
+                  "key": "officeId",
+                  "value": null
+                },
+                {
+                  "key": "startDate",
+                  "value": null
+                },
+                {
+                  "key": "status",
+                  "value": null
+                },
+                {
+                  "key": "type",
+                  "value": null
+                },
+                {
+                  "key": "search",
+                  "value": null
+                }
+              ]
+            },
+            "description": "Retrieve a list of admin accounts with optional filters."
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for managing admin accounts including registration, profile updates, and listing.",
+      "auth": {
+        "type": "jwt",
+        "jwt": [
+          {
+            "key": "algorithm",
+            "value": "HS256",
+            "type": "string"
+          },
+          {
+            "key": "isSecretBase64Encoded",
+            "value": false,
+            "type": "boolean"
+          },
+          {
+            "key": "payload",
+            "value": "{}",
+            "type": "string"
+          },
+          {
+            "key": "addTokenTo",
+            "value": "header",
+            "type": "string"
+          },
+          {
+            "key": "headerPrefix",
+            "value": "Bearer",
+            "type": "string"
+          },
+          {
+            "key": "queryParamKey",
+            "value": "token",
+            "type": "string"
+          },
+          {
+            "key": "header",
+            "value": "{}",
+            "type": "string"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Program Chair",
+      "item": [
+        {
+          "name": "Register program chair",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"personalData\": {\r\n        \"firstName\": \"aw\",\r\n        \"lastName\": \"aw\",\r\n        \"middleName\": \"\",\r\n        \"birthDate\": \"2004-08-09\",\r\n        \"contactNumber\": \"09451360745\",\r\n        \"email\": \"aweaw@gmail.com\",\r\n        \"address\": {\r\n            \"houseNumber\": \"33\",\r\n            \"street\": \"D\",\r\n            \"barangay\": \"string\",\r\n            \"cityMunicipality\": \"string\",\r\n            \"region\": \"string\",\r\n            \"province\": \"string\"\r\n        }\r\n    },\r\n    \"programChairData\":{\r\n         \"courseId\": 1,\r\n         \"startDate\": \"2023-08-09\",\r\n         \"type\": \"Full-time\"\r\n    }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/program-chair",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "program-chair"
+              ]
+            },
+            "description": "Register a new program chair in the system."
+          },
+          "response": []
+        },
+        {
+          "name": "Update program chair info",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"personalData\": {\r\n        \"firstName\": \"aww\",\r\n        \"lastName\": \"aw\",\r\n        \"middleName\": \"\",\r\n        \"birthDate\": \"2004-08-09\",\r\n        \"contactNumber\": \"09451360745\",\r\n        \"email\": \"aweaw@gmail.com\",\r\n        \"address\": {\r\n            \"houseNumber\": \"33\",\r\n            \"street\": \"D\",\r\n            \"barangay\": \"string\",\r\n            \"cityMunicipality\": \"string\",\r\n            \"region\": \"string\",\r\n            \"province\": \"string\"\r\n        }\r\n    },\r\n    \"programChairData\":{\r\n         \"courseId\": 1,\r\n         \"startDate\": \"2023-08-09\",\r\n         \"type\": \"Part-time\"\r\n    }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/program-chair/:programChairId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "program-chair",
+                ":programChairId"
+              ],
+              "variable": [
+                {
+                  "key": "programChairId",
+                  "value": "2"
+                }
+              ]
+            },
+            "description": "Update an existing program chair's profile information."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Program Chair",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/program-chair/:programChairId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "program-chair",
+                ":programChairId"
+              ],
+              "variable": [
+                {
+                  "key": "programChairId",
+                  "value": "3"
+                }
+              ]
+            },
+            "description": "Permanently remove a program chair from the system."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Program Chair Data",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/program-chair/:programChairId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "program-chair",
+                ":programChairId"
+              ],
+              "variable": [
+                {
+                  "key": "programChairId",
+                  "value": "3"
+                }
+              ]
+            },
+            "description": "Retrieve a specific program chair's profile data by their ID."
+          },
+          "response": []
+        },
+        {
+          "name": "List Program Chairs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/program-chair?departmentId&startDate&status=active&type",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "program-chair"
+              ],
+              "query": [
+                {
+                  "key": "departmentId",
+                  "value": null
+                },
+                {
+                  "key": "startDate",
+                  "value": null
+                },
+                {
+                  "key": "status",
+                  "value": "active"
+                },
+                {
+                  "key": "type",
+                  "value": null
+                }
+              ]
+            },
+            "description": "Retrieve a list of program chairs with optional filters."
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for managing program chairs including registration, profile updates, and listing."
+    }
+  ]
+}
