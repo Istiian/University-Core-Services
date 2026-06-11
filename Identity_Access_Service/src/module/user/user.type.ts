@@ -30,3 +30,8 @@ export type RegisterUser = Omit<InferInsertModel<typeof user>, 'userId' | 'passw
 }
 
 export type UpdateUserInfo = Partial<Omit<InferInsertModel<typeof user>, 'userId' | 'password' | 'username'| 'role'>>
+
+export type ListFilters={
+    search?: string;
+    role?: "Student" | "Faculty" | "Staff" | "Admin" | "SuperAdmin";
+}

@@ -1,9 +1,9 @@
 import { user } from "../../db/user";
 import { db } from "../../db/client"
-import { RegisterUser, UpdateUserInfo} from "./user.type";
+import { RegisterUser, UpdateUserInfo, ListFilters} from "./user.type";
 import { AppError } from "../../utils/AppError";
 import { hashPassword, comparePassword } from "../../lib/bcrypt";
-import {desc, eq, and, ne} from "drizzle-orm";
+import {desc, eq, and, ne, or, ilike} from "drizzle-orm";
 import { randomBytes } from "crypto";
 
 export const createUser = async (userData: RegisterUser) => {
@@ -55,3 +55,37 @@ export const updateUserInfo = async (userId: number, userData: UpdateUserInfo) =
         });
     return updatedUser;
 };
+
+export const getUserById = async (userId: number) => {
+    const [userInfo] = await db.select()
+        .from(user)
+        .where(eq(user.userId, userId))
+        .limit(1);
+    if (!userInfo) throw new AppError('User not found', 404);
+    return userInfo;
+};
+
+export const listUsers = async (page: number, limit: number, filters: ListFilters) => {
+    const whereClause= []
+    if (filters.search) {
+        whereClause.push(or(
+            ilike(user.firstName, `%${filters.search}%`),
+            ilike(user.lastName, `%${filters.search}%`),
+            ilike(user.email, `%${filters.search}%`),
+            ilike(user.username, `%${filters.search}%`)
+        ));
+    }
+    const validRoles = ["Student", "Faculty", "Staff", "Admin", "SuperAdmin"];
+    if (filters.role && validRoles.includes(filters.role)) {
+        whereClause.push(eq(user.role, filters.role));
+    }else{
+        throw new AppError('Invalid role filter', 400);
+    }
+    const users = await db.select()
+        .from(user)
+        .where(and(...whereClause))
+        .orderBy(desc(user.userId))
+        .limit(limit)
+        .offset((page - 1) * limit);
+    return users;
+}

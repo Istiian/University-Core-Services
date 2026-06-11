@@ -11,6 +11,7 @@ export type resetPasswordRequest = {
     username: string;
     otp: string;
     newPassword: string;
+    repeatNewPassword: string;
     
 }
 

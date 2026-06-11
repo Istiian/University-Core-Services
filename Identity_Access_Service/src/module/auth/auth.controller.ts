@@ -39,7 +39,10 @@ export const refreshTokenHandler = async (req: Request, res: Response, next: Nex
 export const logoutHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         clearRefreshTokenCookie(res);
-        res.status(200).json({ success: true, message: 'Logged out successfully' });
+        res.status(200).json({
+            success: true, 
+            message: 'Logged out successfully' 
+        });
     } catch (error) {
         next(error);
     }
@@ -91,3 +94,17 @@ export const changePasswordHandler = async (req: Request, res: Response, next: N
         next(error);
     }
 };
+
+export const changePasswordHandlerForAdmin = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userId = Number(req.params.userId);
+        if (Number.isNaN(userId)) {
+            throw new AppError('Invalid user ID', 400);
+        }
+
+        await changePassword(req.body, userId);
+        res.status(200).json({ success: true, message: 'Password changed successfully' });
+    } catch (error) {
+        next(error);
+    }
+}

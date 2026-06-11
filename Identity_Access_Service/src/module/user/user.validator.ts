@@ -21,3 +21,6 @@ export const CreateUserRequestSchema = zod.object({
     province: zod.string().min(1, 'Province is required'),
     role: zod.enum(['Student', 'Staff', 'Faculty', 'Admin', 'Super Admin'], { message: 'Invalid role value' })
 });
+
+export const UpdateUserRequestSchema = CreateUserRequestSchema.partial();
+

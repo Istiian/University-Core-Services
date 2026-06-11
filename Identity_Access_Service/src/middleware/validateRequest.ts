@@ -10,7 +10,6 @@ export const validateRequest = (schema: z.ZodTypeAny) => {
             const message = result.error.issues[0]?.message || "Invalid input data";
             return next(new AppError(message, 400));
         }
-
         req.body = result.data;
         next();
     }

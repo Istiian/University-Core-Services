@@ -63,12 +63,13 @@ export const requestOTP = async (otpData: otpRequest) => {
     }
 
     const otp = randomInt(100000, 999999).toString();
-    await redisClient.setEx(`otp:${userRecord.userId}`, 300, otp);
+   
     await sendEmail(
         userRecord.email,
         'Your OTP Code',
         `Your OTP code is: ${otp}\n\nThis code will expire in 5 minutes.`
     );
+     await redisClient.setEx(`otp:${userRecord.userId}`, 300, otp);
 };
 
 export const verifyOTP = async (username: string, otp: string) => {
@@ -82,7 +83,7 @@ export const verifyOTP = async (username: string, otp: string) => {
     }
 
     const storedOTP = await redisClient.get(`otp:${userRecord.userId}`);
-    if (!storedOTP || storedOTP !== otp) {
+    if (!storedOTP || storedOTP !== String(otp)) {
         throw new AppError('Invalid or expired OTP', 400);
     }
 };
@@ -101,7 +102,9 @@ export const resetPassword = async (resetData: resetPasswordRequest) => {
     if (!storedOTP || storedOTP !== resetData.otp) {
         throw new AppError('Invalid or expired OTP', 400);
     }
-
+    if (resetData.newPassword !== resetData.repeatNewPassword) {
+        throw new AppError('New password and repeat password do not match', 400);
+    }
     const hashedPassword = await hashPassword(resetData.newPassword);
     await db.update(user).set({ password: hashedPassword }).where(eq(user.userId, userRecord.userId));
     await redisClient.del(`otp:${userRecord.userId}`);
