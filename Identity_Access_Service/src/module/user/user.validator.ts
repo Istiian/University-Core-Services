@@ -13,9 +13,6 @@ export const CreateUserRequestSchema = zod.object({
     gender: zod.enum(['Male', 'Female', 'Other'], { message: 'Invalid gender value' }),
     email: zod.string().email('Invalid email format'),
     contactNumber: zod.string().min(1, 'Contact number is required'),
-    username: zod.string().min(1, 'Username is required'),
-    password: zod.string().regex(passwordRegex, 'Password must be at least 8 characters long and include uppercase letters, lowercase letters, numbers, and special characters'),
-    confirmPassword: zod.string().min(1, 'Confirm password is required'),
     houseNumber: zod.string().min(1, 'House number is required'),
     street: zod.string().min(1, 'Street is required'),
     barangay: zod.string().min(1, 'Barangay is required'),
@@ -23,6 +20,4 @@ export const CreateUserRequestSchema = zod.object({
     region: zod.string().min(1, 'Region is required'),
     province: zod.string().min(1, 'Province is required'),
     role: zod.enum(['Student', 'Staff', 'Faculty', 'Admin', 'Super Admin'], { message: 'Invalid role value' })
-}).refine((data) => data.password === data.confirmPassword, {
-    message: 'Passwords do not match',
 });
