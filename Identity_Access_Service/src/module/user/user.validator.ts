@@ -19,7 +19,7 @@ export const CreateUserRequestSchema = zod.object({
     cityMunicipality: zod.string().min(1, 'City/Municipality is required'),
     region: zod.string().min(1, 'Region is required'),
     province: zod.string().min(1, 'Province is required'),
-    role: zod.enum(['Student', 'Staff', 'Faculty', 'Admin', 'Super Admin'], { message: 'Invalid role value' })
+    role: zod.enum(['Student', 'Staff', 'Faculty', 'Admin', 'SuperAdmin'], { message: 'Invalid role value' })
 });
 
 export const UpdateUserRequestSchema = CreateUserRequestSchema.partial();

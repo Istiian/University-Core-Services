@@ -6,7 +6,7 @@ export const requestLogger = (req: Request, res: Response, next: NextFunction) =
     res.on('finish', () => {
         const { method, originalUrl, ip } = req;
         const statusCode = res.statusCode;
-        const message = `${method} ${originalUrl} ${statusCode} - ${ip}`;
+        const message = `${timestamp} ${method} ${originalUrl} ${statusCode} - ${ip}`;
 
         if (statusCode >= 500) {
             logger.error(message);

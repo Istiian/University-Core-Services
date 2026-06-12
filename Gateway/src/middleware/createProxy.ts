@@ -12,7 +12,7 @@ proxy.on('proxyReq', (proxyReq, req) => {
         | undefined;
 
     if (user) {
-        proxyReq.setHeader('x-user-id', user.userId);
+        proxyReq.setHeader('x-user-id', String(user.userId));
         proxyReq.setHeader('x-user-role', user.role);
     }
 });

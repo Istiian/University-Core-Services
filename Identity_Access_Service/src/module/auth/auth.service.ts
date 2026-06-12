@@ -63,13 +63,13 @@ export const requestOTP = async (otpData: otpRequest) => {
     }
 
     const otp = randomInt(100000, 999999).toString();
-   
+
+    await redisClient.setEx(`otp:${userRecord.userId}`, 300, otp);
     await sendEmail(
         userRecord.email,
         'Your OTP Code',
         `Your OTP code is: ${otp}\n\nThis code will expire in 5 minutes.`
     );
-     await redisClient.setEx(`otp:${userRecord.userId}`, 300, otp);
 };
 
 export const verifyOTP = async (username: string, otp: string) => {
@@ -86,6 +86,7 @@ export const verifyOTP = async (username: string, otp: string) => {
     if (!storedOTP || storedOTP !== String(otp)) {
         throw new AppError('Invalid or expired OTP', 400);
     }
+    await redisClient.del(`otp:${userRecord.userId}`);
 };
 
 export const resetPassword = async (resetData: resetPasswordRequest) => {
@@ -128,3 +129,17 @@ export const changePassword = async (changeData: changePasswordRequest, userId: 
     const hashedNewPassword = await hashPassword(changeData.newPassword);
     await db.update(user).set({ password: hashedNewPassword }).where(eq(user.userId, userId));
 };
+
+export const changePasswordForAdmin = async (changeData: changePasswordRequest, userId: number) => {
+    const userRecord = await db.query.user.findFirst({
+        where: eq(user.userId, userId),
+        columns: { password: true },
+    });
+
+    if (!userRecord) {
+        throw new AppError('User not found', 404);
+    }
+
+    const hashedNewPassword = await hashPassword(changeData.newPassword);
+    await db.update(user).set({ password: hashedNewPassword }).where(eq(user.userId, userId));
+}

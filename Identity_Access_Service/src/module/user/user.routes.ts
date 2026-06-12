@@ -1,5 +1,5 @@
 import {
-    registerUserHandler, 
+    registerUserHandler,
     updateUserInfoHandler,
     getUserByIdHandler,
     listUsersHandler
@@ -10,25 +10,30 @@ import {
 } from "./user.validator";
 import { validateRequest } from "../../middleware/validateRequest";
 import { Router } from "express";
+import { checkPermission } from "../../middleware/checkPermission";
 
 const router = Router();
 
 // Create a new user
-router.post('/', 
-    validateRequest(CreateUserRequestSchema), 
+router.post('/',
+    checkPermission('SuperAdmin', 'Admin'),
+    validateRequest(CreateUserRequestSchema),
     registerUserHandler);
 
 // Update user information
-router.patch('/:id', 
-    validateRequest(UpdateUserRequestSchema), 
+router.patch('/:id',
+    checkPermission('SuperAdmin', 'Admin', 'Self'),
+    validateRequest(UpdateUserRequestSchema),
     updateUserInfoHandler);
 
-// Get user by ID and list users
-router.get('/:id', 
+// Get user by ID
+router.get('/:id',
+    checkPermission('SuperAdmin', 'Admin', 'Self'),
     getUserByIdHandler);
 
 // List all users
 router.get('/',
+    checkPermission('SuperAdmin', 'Admin'),
     listUsersHandler);
 
 

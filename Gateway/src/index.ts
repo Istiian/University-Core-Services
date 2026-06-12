@@ -6,11 +6,13 @@ import {AppError} from './utils/AppError';
 import { errorHandler } from './middleware/errorHandler';
 import { requestLogger } from './middleware/requestLogger';
 import {apiRateLimiter} from './middleware/rateLimit';
-const app = express();
+
 dotenv.config();
 
-const PORT = process.env.PORT 
+const app = express();
+const PORT = process.env.PORT || 3000;
 const AllowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : [];
+
 app.use(cors({
     origin: AllowedOrigins,
     credentials: true,
@@ -28,10 +30,6 @@ app.get('/', (req: Request, res: Response) => {
     res.send('Welcome to the Gateway API!');
 });
 
-app.listen(PORT, () => {
-    console.log(`Gateway API is running on port ${PORT}`);
-});
-
 // 404 Not Found Handler
 app.use((req: Request, res: Response, next: NextFunction) => {
     const error = new AppError(`Route ${req.method} ${req.originalUrl} not found`, 404);
@@ -40,3 +38,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 // Global error handler
 app.use(errorHandler);
+
+app.listen(PORT, () => {
+    console.log(`Gateway API is running on port ${PORT}`);
+});

@@ -6,6 +6,7 @@ import {
     verifyOTP,
     resetPassword,
     changePassword,
+    changePasswordForAdmin,
 } from "./auth.service";
 import {
     setRefreshTokenCookie,
@@ -103,7 +104,7 @@ export const changePasswordHandlerForAdmin = async (req: Request, res: Response,
             throw new AppError('Invalid user ID', 400);
         }
 
-        await changePassword(req.body, userId);
+        await changePasswordForAdmin(req.body, userId);
         res.status(200).json({ success: true, message: 'Password changed successfully' });
     } catch (error) {
         next(error);

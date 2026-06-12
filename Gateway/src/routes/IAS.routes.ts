@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express from 'express';
 
 import { apiRateLimiter } from '../middleware/rateLimit';
 import { authenticate } from '../middleware/authenticate';
@@ -24,8 +24,8 @@ router.post('/auth/session',
 const protectedRoutes: RouteConfig[] = [
     // <----- Auth Module Routes -----> //
     { method: 'delete', path: '/auth/session' },
-    { method: 'patch', path: '/auth/password/change/:userId' },
     { method: 'patch', path: '/auth/password/change' },
+    { method: 'patch', path: '/auth/password/change/:userId' },
 
     // <----- User Module Routes -----> //
     { method: 'patch', path: '/users/:id' },

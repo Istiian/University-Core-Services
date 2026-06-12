@@ -78,7 +78,7 @@ export const listUsers = async (page: number, limit: number, filters: ListFilter
     const validRoles = ["Student", "Faculty", "Staff", "Admin", "SuperAdmin"];
     if (filters.role && validRoles.includes(filters.role)) {
         whereClause.push(eq(user.role, filters.role));
-    }else{
+    } else if (filters.role) {
         throw new AppError('Invalid role filter', 400);
     }
     const users = await db.select()

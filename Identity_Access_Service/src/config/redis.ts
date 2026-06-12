@@ -1,6 +1,5 @@
 import { createClient } from 'redis';
 import {logger} from '../utils/logger';
-import {AppError} from '../utils/AppError';
 
 export const redisClient = createClient({
     url: process.env.REDIS_URL || 'redis://localhost:6379',
@@ -8,13 +7,14 @@ export const redisClient = createClient({
 });
 
 redisClient.on('error', (err) => {
-    throw new AppError('Redis client error', 500);
+    logger.error(`Redis client error: ${err}`);
 });
 
 redisClient.connect().then(() => {
     logger.info('Connected to Redis');
 }).catch((err) => {
-    throw new AppError('Failed to connect to Redis', 500);
+    logger.error(`Failed to connect to Redis: ${err}`);
+    process.exit(1);
 });
 
 export default redisClient;

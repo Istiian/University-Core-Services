@@ -4,7 +4,8 @@ import { eq } from "drizzle-orm";
 import { Request, Response, NextFunction } from "express";
 import { AppError } from "../utils/AppError";
 
-export const checkPermission = (...permissions: string[]) => {
+type Role = "Student" | "Faculty" | "Staff" | "Admin" | "SuperAdmin" | "Self";
+export const checkPermission = (...permissions: Role[]) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userIdHeader = req.headers['x-user-id'];
@@ -24,6 +25,13 @@ export const checkPermission = (...permissions: string[]) => {
 
             if (!userRecord) {
                 throw new AppError('User not found', 404);
+            }
+
+            if (permissions.includes('Self')) {
+                const targetUserId = Array.isArray(req.params.userId) ? parseInt(req.params.userId[0], 10) : parseInt(req.params.userId, 10);
+                if (userId === targetUserId) {
+                    return next();
+                }
             }
 
             if (!permissions.includes(userRecord.role)) {

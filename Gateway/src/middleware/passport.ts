@@ -5,7 +5,18 @@ import {logger} from "../utils/logger";
 import dotenv from 'dotenv';
 dotenv.config();
 
-const publickey = fs.readFileSync(process.env.PUBLIC_KEY_PATH as string, 'utf8');
+if (!process.env.PUBLIC_KEY_PATH) {
+    logger.error('PUBLIC_KEY_PATH environment variable is not set');
+    process.exit(1);
+}
+
+let publickey: string;
+try {
+    publickey = fs.readFileSync(process.env.PUBLIC_KEY_PATH, 'utf8');
+} catch (err) {
+    logger.error(`Failed to read public key from "${process.env.PUBLIC_KEY_PATH}": ${err}`);
+    process.exit(1);
+}
 
 const opts = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

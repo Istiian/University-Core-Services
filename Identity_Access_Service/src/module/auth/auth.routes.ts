@@ -12,11 +12,13 @@ import {
 import { validateRequest } from "../../middleware/validateRequest";
 import { 
     changePasswordSchema,
+    adminChangePasswordSchema,
     loginSchema, 
     requestPasswordResetSchema,
     resetPasswordSchema,
     verifyOTPSchema,
 } from "./auth.validator";
+import {checkPermission} from "../../middleware/checkPermission";
 
 const router = Router();
 
@@ -50,12 +52,14 @@ router.post('/password/reset',
 
 // Change password
 router.patch('/password/change',
+    checkPermission('SuperAdmin', 'Self'),
     validateRequest(changePasswordSchema),
     changePasswordHandler);
 
 // Change password with userId in path (for admin use)
 router.patch('/password/change/:userId',
-    validateRequest(changePasswordSchema),
+    checkPermission('SuperAdmin', 'Self'),
+    validateRequest(adminChangePasswordSchema),
     changePasswordHandlerForAdmin);
 
 export default router;

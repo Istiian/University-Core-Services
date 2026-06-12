@@ -4,9 +4,6 @@ export const logger = winston.createLogger({
     level: 'info',
     format: winston.format.combine(
         winston.format.timestamp(),
-        winston.format.printf(({ timestamp, level, message }) => {
-            return `[${level}] ${timestamp}: ${message}`;
-        }),
         winston.format.errors({ stack: true }),
         winston.format.json()
     ),
@@ -18,9 +15,10 @@ export const logger = winston.createLogger({
                 winston.format.colorize(),
                 winston.format.timestamp(),
                 winston.format.errors({ stack: true }),
-                winston.format.simple(),
-                winston.format.printf(({ timestamp, level, message }) => {
-                    return `[${level}] ${timestamp}: ${message}`;
+                winston.format.printf(({ timestamp, level, message, stack }) => {
+                    return stack
+                        ? `[${level}] ${timestamp}: ${message}\n${stack}`
+                        : `[${level}] ${timestamp}: ${message}`;
                 })
             )
         })

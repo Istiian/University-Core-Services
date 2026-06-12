@@ -2,7 +2,7 @@ import zod from 'zod';
 
 const passwordSchema = zod
     .string()
-    .min(9, "Password must be exactly 9 characters")
+    .min(9, "Password must be at least 9 characters")
     .regex(/[a-z]/, "Password must contain at least one lowercase letter")
     .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
     .regex(/[0-9]/, "Password must contain at least one number")
@@ -34,6 +34,14 @@ export const verifyOTPSchema = zod.object({
 
 export const changePasswordSchema = zod.object({
     currentPassword: zod.string(),
+    newPassword: passwordSchema,
+    repeatNewPassword: passwordSchema,
+}).refine((data) => data.newPassword === data.repeatNewPassword, {
+    message: "Passwords do not match",
+    path: ["repeatNewPassword"],
+});
+
+export const adminChangePasswordSchema = zod.object({
     newPassword: passwordSchema,
     repeatNewPassword: passwordSchema,
 }).refine((data) => data.newPassword === data.repeatNewPassword, {
