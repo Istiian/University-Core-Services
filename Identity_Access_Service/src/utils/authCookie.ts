@@ -8,7 +8,7 @@ const cookieOptions: CookieOptions = {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
-    path: '/auth',
+    path: '/IAS/auth/token'
 };
 
 export const setRefreshTokenCookie = (res: Response, token: string) => {

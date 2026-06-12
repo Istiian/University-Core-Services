@@ -16,8 +16,7 @@ import {
     requestPasswordResetSchema,
     resetPasswordSchema,
     verifyOTPSchema,
-    
-     } from "./auth.validator";
+} from "./auth.validator";
 
 const router = Router();
 

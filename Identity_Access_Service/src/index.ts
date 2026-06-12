@@ -16,8 +16,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.use('/api/users', userRoutes);
-app.use('/auth', authRoutes);
+app.use('/IAS/users', userRoutes);
+app.use('/IAS/auth', authRoutes);
 
 const PORT = process.env.PORT || 3000;
 
@@ -27,7 +27,7 @@ app.listen(PORT, () => {
 
 // 404 handler
 app.use((req, res, next) => {
-    next(new AppError('Not Found', 404));
+    next(new AppError(`Route  ${req.originalUrl} not found`, 404));
 });
 
 // Error handler

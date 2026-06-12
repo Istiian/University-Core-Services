@@ -79,6 +79,7 @@ export const resetPasswordHandler = async (req: Request, res: Response, next: Ne
 export const changePasswordHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userIdHeader = req.headers['x-user-id'];
+        
         if (!userIdHeader) {
             throw new AppError('Unauthorized', 401);
         }
