@@ -30,7 +30,8 @@ const protectedRoutes: RouteConfig[] = [
     // <----- User Module Routes -----> //
     { method: 'patch', path: '/users/:id' },
     { method: 'get', path: '/users/:id' },
-    { method: 'get', path: '/users' }
+    { method: 'get', path: '/users' },
+    { method: 'post', path: '/users' }
 ]
 
 protectedRoutes.forEach(route => {
@@ -38,7 +39,6 @@ protectedRoutes.forEach(route => {
 });
 
 const publicRoutes: RouteConfig[] = [
-    { method: 'post', path: '/users' },
     { method: 'post', path: '/auth/token' },
     { method: 'post', path: '/auth/password/reset-request' },
     { method: 'post', path: '/auth/otp/verify' },
