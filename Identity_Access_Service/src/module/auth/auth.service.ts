@@ -141,7 +141,6 @@ export const changePassword = async (changeData: changePasswordRequest, userId: 
     await db.update(user).set({ password: hashedNewPassword }).where(eq(user.userId, userId));
 };
 
-<<<<<<< HEAD
 export const changePasswordForAdmin = async (changeData: changePasswordRequest, userId: number) => {
     const userRecord = await db.query.user.findFirst({
         where: eq(user.userId, userId),
@@ -155,5 +154,3 @@ export const changePasswordForAdmin = async (changeData: changePasswordRequest, 
     const hashedNewPassword = await hashPassword(changeData.newPassword);
     await db.update(user).set({ password: hashedNewPassword }).where(eq(user.userId, userId));
 }
-=======
->>>>>>> service/identity_access
