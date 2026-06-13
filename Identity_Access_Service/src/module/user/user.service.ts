@@ -1,10 +1,15 @@
 import { user } from "../../db/user";
 import { db } from "../../db/client"
-import { RegisterUser, UpdateUserInfo, ListFilters} from "./user.type";
+import { RegisterUser, UpdateUserInfo, ListFilters } from "./user.type";
 import { AppError } from "../../utils/AppError";
 import { hashPassword, comparePassword } from "../../lib/bcrypt";
-import {desc, eq, and, ne, or, ilike} from "drizzle-orm";
+import { desc, eq, and, ne, or, ilike } from "drizzle-orm";
 import { randomBytes } from "crypto";
+import { redisClient } from "../../config/redis";
+
+const incrUserListVersion = async () => {
+    await redisClient.incr(`userListVersion`);
+}
 
 export const createUser = async (userData: RegisterUser) => {
     const existingUser = await db.select()
@@ -15,17 +20,17 @@ export const createUser = async (userData: RegisterUser) => {
         throw new AppError('Email already exists', 400);
     }
     const [lastRow] = await db
-      .select()
-      .from(user)
-      .orderBy(desc(user.userId))
-      .limit(1);
-    
+        .select()
+        .from(user)
+        .orderBy(desc(user.userId))
+        .limit(1);
+
     const generatedUsername = `${userData.lastName.toUpperCase()}${new Date().getFullYear()}${(lastRow?.userId || 0) + 1}`;
     const generatedPassword = randomBytes(16).toString('base64').slice(0, 16);
     const hashedPassword = await hashPassword(generatedPassword);
-    const insertData = {...userData, username: generatedUsername, password: hashedPassword};
+    const insertData = { ...userData, username: generatedUsername, password: hashedPassword };
     await db.insert(user).values(insertData)
-    
+
     return {
         username: generatedUsername,
         password: generatedPassword
@@ -40,33 +45,55 @@ export const updateUserInfo = async (userId: number, userData: UpdateUserInfo) =
             .limit(1);
         if (checkEmail.length > 0) throw new AppError('Email already exists', 400);
     }
-    
+
     const [updatedUser] = await db
         .update(user)
         .set(userData)
         .where(eq(user.userId, userId))
         .returning({
-            userId: user.userId,  firstName: user.firstName,
+            userId: user.userId, firstName: user.firstName,
             lastName: user.lastName, middleName: user.middleName,
             birthDate: user.birthDate, email: user.email,
-            contactNumber: user.contactNumber,houseNumber: user.houseNumber,
+            contactNumber: user.contactNumber, houseNumber: user.houseNumber,
             street: user.street, barangay: user.barangay, cityMunicipality: user.cityMunicipality,
             region: user.region, province: user.province
         });
+    await redisClient.del(`user:${userId}`);
+    await incrUserListVersion();
     return updatedUser;
 };
 
 export const getUserById = async (userId: number) => {
-    const [userInfo] = await db.select()
+    const cachedUser = await redisClient.get(`user:${userId}`);
+    if (cachedUser) {
+        return JSON.parse(cachedUser);
+    }
+    const [userInfo] = await db.select({
+        userId: user.userId, firstName: user.firstName,
+        lastName: user.lastName, middleName: user.middleName,
+        birthDate: user.birthDate, email: user.email,
+        contactNumber: user.contactNumber, houseNumber: user.houseNumber,
+        street: user.street, barangay: user.barangay, cityMunicipality: user.cityMunicipality,
+        region: user.region, province: user.province
+    })
         .from(user)
         .where(eq(user.userId, userId))
         .limit(1);
     if (!userInfo) throw new AppError('User not found', 404);
+    await redisClient.setEx(`user:${userId}`, 3600, JSON.stringify(userInfo));
     return userInfo;
 };
 
 export const listUsers = async (page: number, limit: number, filters: ListFilters) => {
-    const whereClause= []
+    const version = await redisClient.get(`userListVersion`) || '1';
+    console.log('User list version:', version);
+    const cacheKey = `userList:page=${page}:limit=${limit}:search=${filters.search || ''}:role=${filters.role || ''}:version=${version}`;
+    const cachedList = await redisClient.get(cacheKey);
+    if (cachedList) {
+        return JSON.parse(cachedList);
+    }
+
+    const whereClause = []
     if (filters.search) {
         whereClause.push(or(
             ilike(user.firstName, `%${filters.search}%`),
@@ -76,16 +103,19 @@ export const listUsers = async (page: number, limit: number, filters: ListFilter
         ));
     }
     const validRoles = ["Student", "Faculty", "Staff", "Admin", "SuperAdmin"];
-    if (filters.role && validRoles.includes(filters.role)) {
-        whereClause.push(eq(user.role, filters.role));
-    }else{
-        throw new AppError('Invalid role filter', 400);
+    if (filters.role === null || (filters.role && validRoles.includes(filters.role))) {
+        if (filters.role !== null) {
+            whereClause.push(eq(user.role, filters.role));
+        }
     }
+    
     const users = await db.select()
         .from(user)
         .where(and(...whereClause))
         .orderBy(desc(user.userId))
         .limit(limit)
         .offset((page - 1) * limit);
+
+    await redisClient.setEx(cacheKey, 300, JSON.stringify(users));
     return users;
 }

@@ -28,15 +28,20 @@ export const login = async (loginData: loginRequest) => {
         userId: userRecord.userId,
         role: userRecord.role,
     };
-
+    
     const accessToken = generateAccessToken(tokenCredentials);
     const refreshToken = generateRefreshToken(tokenCredentials);
-
+    await redisClient.setEx(`refreshToken:${userRecord.userId}`, 7 * 24 * 60 * 60, refreshToken);
     return { accessToken, refreshToken };
 };
 
 export const refreshToken = async (token: string) => {
     const payload = verifyRefreshToken(token);
+    const storedToken = await redisClient.get(`refreshToken:${payload.userId}`);
+
+    if (!storedToken || storedToken !== token) {
+        throw new AppError('Invalid or expired refresh token', 401);
+    }
 
     const tokenCredentials = {
         userId: payload.userId,
@@ -44,8 +49,14 @@ export const refreshToken = async (token: string) => {
     };
 
     const accessToken = generateAccessToken(tokenCredentials);
+    await redisClient.setEx(`accessToken:${tokenCredentials.userId}`, 3600, accessToken);
     return { accessToken };
 };
+
+export const logout = async (userId: number) => {
+    await redisClient.del(`refreshToken:${userId}`);
+    return true;
+}
 
 export const requestOTP = async (otpData: otpRequest) => {
     const userRecord = await db.query.user.findFirst({
@@ -128,3 +139,4 @@ export const changePassword = async (changeData: changePasswordRequest, userId: 
     const hashedNewPassword = await hashPassword(changeData.newPassword);
     await db.update(user).set({ password: hashedNewPassword }).where(eq(user.userId, userId));
 };
+
