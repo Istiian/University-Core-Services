@@ -69,7 +69,21 @@ pnpm install
 cp .env.example .env   # or manually create .env — see Environment Variables section
 ```
 
-Place your RS256 **public key** at the path specified by `PUBLIC_KEY_PATH` (default: `./src/keys/public.pem`).
+### Getting the RS256 Public Key
+
+The Gateway only needs the **public key**. The key pair is generated in the Identity Access Service — run the commands there first, then copy the public key here.
+
+```bash
+# From the Identity_Access_Service directory, generate the key pair (if not done already)
+openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:4096 -out keys/private.pem
+openssl rsa -pubout -in keys/private.pem -out keys/public.pem
+
+# Then copy the public key into the Gateway
+mkdir -p ../Gateway/src/keys
+copy keys\public.pem ..\Gateway\src\keys\public.pem
+```
+
+Place the public key at the path specified by `PUBLIC_KEY_PATH` (default: `./src/keys/public.pem`). Never put the private key in the Gateway directory.
 
 ---
 

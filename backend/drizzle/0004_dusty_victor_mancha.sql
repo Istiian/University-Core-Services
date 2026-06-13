@@ -1,1 +1,0 @@
-ALTER TABLE "faculty" RENAME COLUMN "hire_date" TO "start_date";

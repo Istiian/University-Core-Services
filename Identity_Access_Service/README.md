@@ -1,6 +1,6 @@
 # Identity Access Service (IAS)
 
-The Identity Access Service handles all authentication and user management for the Unified Personnel Management System. It is a downstream microservice that sits behind the API Gateway and is never called directly by clients.
+The Identity Access Service handles all authentication and user management for the University Core Services. It is a downstream microservice that sits behind the API Gateway and is never called directly by clients.
 
 ## Table of Contents
 
@@ -78,6 +78,23 @@ cp .env.example .env   # or create .env manually — see Environment Variables s
 pnpm db:generate
 pnpm db:migrate
 ```
+
+### Generating the RS256 Key Pair
+
+You need OpenSSL installed to run these commands. They produce a 4096-bit RSA private key and derive the matching public key from it.
+
+```bash
+# Create the keys directory
+mkdir -p keys
+
+# Generate the private key
+openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:4096 -out keys/private.pem
+
+# Derive the public key from the private key
+openssl rsa -pubout -in keys/private.pem -out keys/public.pem
+```
+
+Copy `keys/public.pem` to the Gateway service (`Gateway/src/keys/public.pem`) so it can verify tokens. Keep `keys/private.pem` only inside IAS — never share or commit it.
 
 Place your RS256 key pair at the paths specified by `PRIVATE_KEY_PATH` and `PUBLIC_KEY_PATH` (defaults: `./keys/private.pem`, `./keys/public.pem`).
 
